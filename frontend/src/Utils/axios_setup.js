@@ -1,9 +1,8 @@
 import axios from "axios"
-import backend from "./backend_settings"
 
 let instance = axios.create({
-   baseURL: backend.baseURL,
-   withCredentials: true
+   baseURL: process.env.REACT_APP_BACKEND_URL,
+   withCredentials: false
 });
 
-module.exports = instance;
+export default instance;

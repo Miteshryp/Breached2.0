@@ -24,23 +24,26 @@ const schema = {
    },
 
    participant: [{
-      participantID: mongoose.Types.ObjectId,
+      participantID: {
+         type: String,
+         required: true
+      },
       score: Number,
-      submissionTime: [{type: Date}], // size will be same as the questions
-      currentQues: Number
+      lastSubmissionTime: Date, // size will be same as the questions
+      currentQues: String
    }],
 
    question:{
       required: true,
       type: [{
-         qid: Number,
+         qid: String,
          statement: String,
          answer: String,
          awardPoints: Number,
-         img: {
-            data: Buffer,
+         clueMedia: [{
+            url: String,
             contentType: String
-         },
+         }],
          hints: [{type: String}]
       }]
    },

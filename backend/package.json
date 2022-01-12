@@ -4,6 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "dev": "NODE_ENV=development node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,6 +17,8 @@
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.4",
-    "node-color-log": "^7.0.0"
+    "node-color-log": "^7.0.0",
+    "uuid": "^8.3.2",
+    "yup": "^0.32.11"
   }
 }

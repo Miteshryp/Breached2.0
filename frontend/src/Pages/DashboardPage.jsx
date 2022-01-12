@@ -1,0 +1,75 @@
+import Dashboard from "./../Components/Dashboard"
+import { HomeIcon,ChartBarIcon,DocumentIcon, XIcon } from "@heroicons/react/solid";
+import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
+import {ReactComponent as IeeeLogo} from "./../Assets/svg/ieee_logo.svg"
+import Login from "./Login";
+import { useEffect, useState } from "react";
+import {ReactComponent as LoadingSVG} from "./../Assets/svg/loginLoad.svg"
+import Modal from "../Components/Modal";
+
+export default function DashboardPage() {
+
+    let [authenticated, setAuthenticated] = useState(false);
+    let [checked, setChecked] = useState(false);
+
+    useEffect(() => {
+        let tokenName = process.env.REACT_APP_USER_TOKEN
+        console.log(tokenName)
+        let token = localStorage.getItem(tokenName);
+        console.log("Token: " + token)
+        if(token) {
+            setAuthenticated(true);
+        }
+        setChecked(true);
+    });
+
+    let screens = [
+        {
+            screenComponent: () => {
+                return <Login />
+            },
+            iconComponent: HomeIcon
+        },
+        {
+            screenComponent: () => {
+                return <h1> Element 2</h1>
+            },
+            iconComponent: DocumentIcon
+        },
+        {
+            screenComponent: () => {
+                return <h1> Element 3</h1>
+            },
+            iconComponent: ChartBarIcon
+        },
+    ]
+
+    return (
+        <div>
+            <div className={`${authenticated ? 'flex' : 'hidden'}`} >
+                <Dashboard screens={screens} HomeLogo={IeeeLogo}/>
+            </div>
+            <div className={``}>
+
+            </div>
+
+            {/* Failed modal */}
+            <Modal md visible={!authenticated && checked}>
+                <div className="p-4 flex flex-col justify-center items-center gap-2">
+                    <FailLogo className="w-1/2 h-1/2 fill-rose-500 animate-pulse" ></FailLogo>
+                    <h1 className="text-white font-inter text-5xl my-4"> Authentication Failed</h1>
+                    <h1 className="text-white text-3xl"> Please Login to access dashboard </h1>
+                </div>
+            </Modal>
+
+            {/* Loading Modal */}
+            <Modal md visible={!checked && !authenticated} >
+                <div className="flex flex-col justify-center items-center">
+                    <LoadingSVG className="w-1/2 h-1/2 fill-sky-400 animate-pulse" />
+                    <h1 className="text-white text-5xl">Please wait</h1>
+                </div>
+            </Modal>
+        </div>
+
+    )
+}

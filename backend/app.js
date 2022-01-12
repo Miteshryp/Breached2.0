@@ -2,11 +2,18 @@
 // ------------------------------- Imports ---------------------------------------------
 
 // modules
-const dotenv = require("dotenv").config();
+let extension = "";
+if(process.env.NODE_ENV === 'production') extension = ".prod";
+else if(process.env.NODE_ENV === 'development') extension = ".dev";
+else extension = "";
+console.debug(`./.env${extension}`);
+
+const dotenv = require("dotenv").config({path: `./.env${extension}`});
 const express = require("express");
 const cors = require("cors");
 const logger = require("node-color-log");
 const mongoose = require("mongoose");
+
 
 if(dotenv.error) {
    logger.error("Dotenv initialisation failed.");
@@ -21,8 +28,9 @@ const serverSettings = require("./utils/serverSettings");
 // ------------------------------- Initialisation --------------------------------------
 const app = express();
 
-app.use(express.json());
 app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 // Database initiation.
 const dburl = process.env.DB_URI;
@@ -30,7 +38,7 @@ let initDatabase = async () => { await mongoose.connect(dburl) };
 initDatabase();
 
 // routers
-app.use("/leaderboard", require("./routes/leaderBoard"));
+app.use("/contest", require("./routes/contest"));
 app.use("/user", require("./routes/user"));
 
 

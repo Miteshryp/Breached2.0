@@ -1,7 +1,8 @@
-let verifyAuth = require("./auth");
+let auth = require("./auth");
 
 let middlewares = {
-   verifyAuth
+   verifyAuth: auth.verifyAuth,
+   verifyAdminAuth: auth.verifyAdminAuth
 }
 
 module.exports = middlewares;

@@ -2,9 +2,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const secret = process.env.SECRET;
 const adminSecret = process.env.ADMIN_SECRET;
-const saltRounds = process.env.SALT_ROUNDS;
+const saltRounds = Number(process.env.SALT_ROUNDS);
 
 const Participant = require("./../models/participant");
+const logger = require("node-color-log");
 
 exports.login = async (req,res) => {
    let {regNo, password} = req.body;
@@ -23,11 +24,15 @@ exports.login = async (req,res) => {
          .send({message: "Incorrect Password", auth: false});
    }
 
-
-   let token = jwt.sign(user, secret);
+   
+   let token = jwt.sign({...user}._doc, secret);
    let response = {message: "Login Successful", auth: true, token};
    // if(adminCheck) response.admin = true;
 
+   logger.info("Login Successful");
+   logger.debug("User data: ");
+   logger.debug({...user});
+   
       return res
          .status(200)
          .send(response);
@@ -65,6 +70,9 @@ exports.adminLogin = async (req, res) => {
       token
    }
 
+   logger.info("Admin Login Successful");
+   logger.debug(adminUserData);
+   
    return res
       .status(200)
       .send(response);
@@ -74,7 +82,7 @@ exports.adminLogin = async (req, res) => {
 exports.signup = async (req, res) => {
    let {name, email, regNo, password} = req.body;
    
-   let checkArr = Participant.findOne({regNo});
+   let checkArr = await Participant.findOne({regNo});
    if(checkArr)
       return res
          .status(500)
@@ -83,11 +91,26 @@ exports.signup = async (req, res) => {
    let hashedPass = await bcrypt.hash(password, saltRounds);
 
    let data = {
-      name, email, regNo, hashedPass
+      name, email, regNo, password: hashedPass
    };
    
    let user = new Participant(data);
    user = await user.save();
+
+   if(!user) {
+      return res
+         .status(500)
+         .send({message: "Registration Failed: DB error", auth: false, fatal: true});
+   }
+
+   let token = jwt.sign({...user}, secret);
+
+   logger.info("Successfully Signed Up");
+   logger.debug({...user});
+
+   return res
+      .status(200)
+      .send({message: "Registration successful", auth: true, token});
 }
 
 

@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
+import navigationData from "./navigation";
 
 function App() {
+  let arr = [];
+  Object.keys(navigationData).forEach((key) => {
+    arr.push(navigationData[key]);
+  });
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {
+          arr.map((element) => <Route exact path={element.path} element={element.component} />)
+        }
+        {/* <Route exact path="/landing" element={<LandingPage />} />
+        <Route exact path="/test" element={<TestPage />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/signup" element={<Signup />} />
+        <Route exact path="/deleteToken" element={<DeleteTestPage />} /> */}
+      </Routes>
+    </Router>
+
   );
 }
 

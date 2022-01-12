@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET;
+const logger = require("node-color-log")
 
 function verifyAuth(req, res, next) {
    let token = req.headers["x-access-token"];

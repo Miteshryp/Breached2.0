@@ -6,7 +6,8 @@ let schema = {
       required: true, 
       type: Number
    },
-   email: String
+   email: String,
+   password: String
 };
 
 const modelSchema = new mongoose.Schema(schema);
