@@ -6,11 +6,11 @@ export default function MyPopover(props) {
     let {screens, HomeLogo} = props;
   
     return (
-      <div className="flex flex-col md:flex-row w-screen justify-start">
+      <div className="md:h-screen flex flex-col md:flex-row w-screen justify-start">
       <Tab.Group manual>
-        <div className="w-screen h-24 md:h-screen md:w-20 pt-2 pb-0 md:py-4 flex flex-col md:flex-row justify-end bg-[#120F05]">
+        <div className="w-screen fixed top-0 left-0 z-50 h-24 md:h-full md:w-20 pt-2 pb-0 md:py-4 flex flex-col md:flex-row justify-end bg-[#120F05]">
           <Tab.List className="w-full h-full flex-grow flex flex-row justify-center md:justify-start md:flex-col gap-3">
-            <div className={"w-[100%] px-4 md:w-auto my-auto md:my-0 md:mb-10"} > <HomeLogo className="w-full"/></div>
+            <div className={"w-full px-4 md:w-auto my-auto md:my-0 md:mb-10"} > <HomeLogo className="w-full"/></div>
             {
               screens.map((element) => {
                 let Icon = element.iconComponent;
@@ -22,12 +22,12 @@ export default function MyPopover(props) {
           </Tab.List>
         </div>
       
-        <Tab.Panels className={"w-full"}>
+        <Tab.Panels className={"w-full mt-24 md:mt-0 md:ml-20"}>
           {
             screens.map((element) => {
               let Screen = element.screenComponent;
               return (
-              <Tab.Panel className="relative w-full self-stretch">
+              <Tab.Panel className="relative w-full">
                 <Screen />
               </Tab.Panel>
               )

@@ -156,7 +156,6 @@ export default function Login(props) {
                 <h1 className="text-white text-4xl font-roboto text-center"> {failShow.message} </h1>
             </div>
         </Modal>
-        )
 
 
                 

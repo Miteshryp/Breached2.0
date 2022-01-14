@@ -37,6 +37,7 @@ const schema = {
       required: true,
       type: [{
          qid: String,
+         title: String,
          statement: String,
          answer: String,
          awardPoints: Number,

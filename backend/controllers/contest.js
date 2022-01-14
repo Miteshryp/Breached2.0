@@ -388,7 +388,7 @@ exports.createContest = async(req, res) => {
    contest = await contest.save();
    
    if(!contest)
-      return errorResponse(res, "Failed to create contest! Unknown error");
+      return errorResponse(res, "Failed to create contest! Unknown error", {fatal: true});
       
 
    return successResponse(res, "Contest created successfully");

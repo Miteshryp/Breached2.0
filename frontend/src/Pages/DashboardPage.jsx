@@ -6,6 +6,7 @@ import Login from "./Login";
 import { useEffect, useState } from "react";
 import {ReactComponent as LoadingSVG} from "./../Assets/svg/loginLoad.svg"
 import Modal from "../Components/Modal";
+import QuestionScreen from "./Screens/QuestionScreen";
 
 export default function DashboardPage() {
 
@@ -32,7 +33,7 @@ export default function DashboardPage() {
         },
         {
             screenComponent: () => {
-                return <h1> Element 2</h1>
+                return <QuestionScreen />
             },
             iconComponent: DocumentIcon
         },

@@ -10,8 +10,15 @@ module.exports = {
     extend: {
       backgroundImage: {
         'landing': "url('/src/Assets/images/biohazard.jpg')"
-      }
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwind-scrollbar")
+  ],
+  variants: {
+    scrollbar: ['rounded']
+  },
+
+
 }

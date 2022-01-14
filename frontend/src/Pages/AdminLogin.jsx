@@ -15,8 +15,8 @@ export default function AdminLogin(props) {
    const 
    header = {salutation: "Admin usage only", title: "Login"},
    initialValue = {
-      regNo: process.env.ADMIN_INITIAL_REGNO,
-      password: process.env.ADMIN_INITIAL_PASSWORD
+      regNo: (process.env.NODE_ENV === "production" ? "" : process.env.REACT_APP_ADMIN_INITIAL_REGNO),
+      password: (process.env.NODE_ENV === "production" ? "" : process.env.REACT_APP_ADMIN_INITIAL_PASSWORD)
    },
    validationSchema = yup.object().shape({
       regNo: yup.string().matches(/^[0-9]+$/).required(),
