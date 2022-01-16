@@ -6,25 +6,42 @@ import * as yup from 'yup'
 
 import {ReactComponent as LoginLoader} from "./../Assets/svg/loginLoad.svg"
 
+import * as successAnimationData from "./../Assets/animations/successAnimation.json"
+import * as alertAnimation from "./../Assets/animations/alertAnimation.json"
+
 //Components
 import FormCard from "../Components/FormCard";
 import Modal from "../Components/Modal";
 
 import backend_settings from "../backend_settings";
+import Lottie from "react-lottie";
 
 export default function Login(props) {
-
+    
     let navigate = useNavigate();
-
+    
+    //hooks
+    let [showRedirect, setShowRedirect] = useState(false);
+    let [fetching, setFetching] = useState(false);
+    let [loginSuccess, setLoginSuccess] = useState(false);
     let [failShow, setFailShow] = useState({status: false, message: ""});
     let [askNavigate, setAskNavigate] = useState(false);
 
     useEffect(() => {
-        let token = localStorage.getItem("token");
-        if(token) {
-            setAskNavigate(true);
+        let token = localStorage.getItem(process.env.REACT_APP_USER_TOKEN);
+        console.log("Found: " + token)
+        if(token && token !== "") {
+            setShowRedirect(true);
         } 
     }, []);
+
+
+    useEffect(() => {
+        if(askNavigate) {
+            console.log("Going to dashboard");
+            navigate("/dashboard")
+        }
+    }, [askNavigate])
 
 
     // Function Handlers
@@ -41,9 +58,10 @@ export default function Login(props) {
             // console.log(...response);
             if(response.data.auth) {
                 setFetching(false);
-                localStorage.setItem("token", response.data.token);
+                localStorage.setItem(process.env.REACT_APP_USER_TOKEN, response.data.token);
+                setLoginSuccess(true);
                 // setAskNavigate(true);
-                navigate("/dashboard", {replace: true});
+                // navigate("/dashboard", {replace: true});
             } else {
                 console.log("Auth Failed");
                 console.log(response.data.message);
@@ -63,9 +81,6 @@ export default function Login(props) {
         }
     }
 
-    //hooks
-    let [fetching, setFetching] = useState(false);
-    let [loginSuccess, setLoginSuccess] = useState();
 
     // preset data
     let initialValues = {
@@ -151,6 +166,50 @@ export default function Login(props) {
                 <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
                 <h1 className="text-white text-4xl font-inter text-center"> Login Failed </h1>
                 <h1 className="text-white text-4xl font-roboto text-center"> {failShow.message} </h1>
+            </div>
+        </Modal>
+
+        <Modal sm visible={!fetching && loginSuccess}>
+            <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
+                <Lottie
+                    className={"w-full h-full"}
+                    options={{
+                        loop: false,
+                        autoplay: false,
+                        animationData: successAnimationData,
+                        renderSettings: {
+                            preserveAspectRatio: "xMidyMid slice"
+                        }
+                    }}
+                    isStopped={!loginSuccess}
+                    isClickToPauseDisabled={true}
+                    eventListeners={[{eventName: "complete", callback: () => navigate("/dashboard")}]}
+                ></Lottie>
+                <h1 className="text-white text-4xl font-inter text-center"> Login Successful </h1>
+            </div>
+        </Modal>
+
+        <Modal sm visible={showRedirect}>
+            <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
+                <Lottie
+                    className={"w-full h-full"}
+                    options={{
+                        loop: true,
+                        autoplay: false,
+                        animationData: alertAnimation,
+                        renderSettings: {
+                            preserveAspectRatio: "xMidyMid slice"
+                        }
+                    }}
+                    isStopped={!showRedirect}
+                    isClickToPauseDisabled={true}
+                ></Lottie>
+                <h1 className="text-white text-4xl font-inter text-center"> An account is already logged in. Proceed to dashboard? </h1>
+                
+                <div className="mt-10 w-full flex flex-col md:flex-row justify-center items-center gap-5">
+                    <button className="w-full p-4 rounded-md text-center text-white text-2xl font-roboto font-medium bg-emerald-500 hover:bg-transparent hover:border-2 hover:border-emerald-500 hover:text-emerald-500 transition-all ease-in-out" onClick={() => navigate("/dashboard")}> Yes</button>
+                    <button className="w-full p-4 rounded-md text-center text-white text-2xl font-roboto font-medium bg-rose-500 hover:bg-transparent hover:border-2 hover:border-rose-500 hover:text-rose-500 transition-all ease-in-out" onClick={() => setShowRedirect(false)}> No </button>
+                </div>
             </div>
         </Modal>
 

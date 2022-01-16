@@ -4,6 +4,16 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router";
 import * as yup from 'yup'
 
+import Modal from "../Components/Modal";
+import Lottie from "react-lottie";
+
+import * as successAnimationData from "./../Assets/animations/successAnimation.json"
+import * as alertAnimation from "./../Assets/animations/alertAnimation.json"
+
+
+import {ReactComponent as Loader} from "./../Assets/svg/loginLoad.svg"
+import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
+
 import backend_settings from "../backend_settings";
 import FormCard from "../Components/FormCard";
 
@@ -29,9 +39,9 @@ export default function Signup(props) {
     let navigate = useNavigate();
     //hooks
     let [fetching, setFetching] = useState(false);
-    let [signupSuccess, setSignupSuccess] = useState();
-    
-    
+    let [failShow, setFailShow] = useState({message: '', status: false});
+    let [complete, setComplete] = useState(false);
+    let [askProceed, setAskProceed] = useState(false);
     
     // Function Handlers
     const navigateLogin = (event) => {
@@ -40,16 +50,31 @@ export default function Signup(props) {
     }
     const onSubmit = async (values, actions) => {
         console.log("Something");
-        let response = await axios.post(backend_settings.signup, values);
-        console.log(response);
-        if(response.data.auth) {
+        setFetching(true);
+        try {
+            let response = await axios.post(backend_settings.signup, values);
+            console.log(response);
+            if(response.data.auth) {
+                setFetching(false);
+                localStorage.setItem(process.env.REACT_APP_USER_TOKEN, response.data.token);
+                setComplete(true);
+                setFailShow({message: "", status: false})
+                // navigate("../dashboard");
+            } else {
+                console.log("Auth Failed");
+                setFetching(false);
+                setFailShow({
+                    status: true,
+                    message: response.response.data.message
+                });
+            }
+        } catch(err) {
+            console.log(err.response);
             setFetching(false);
-            localStorage.setItem("token", response.data.token);
-            navigate("../dashboard");
-        } else {
-            console.log("Auth Failed");
-            console.log(response.data.message);
-            setFetching(false);
+            setFailShow({
+                status: true,
+                message: (err.response && err.response.data ? err.response.data.message : err.message)
+            });
         }
     }
     
@@ -108,18 +133,8 @@ export default function Signup(props) {
                 Login 
         </button>
     );
-    
 
-
-
-    // executions
-    useEffect(() => {
-        let token = localStorage.getItem("token");
-        if(token) navigate("dashboard"); 
-    }, []);
-
-
-    
+    console.log(failShow.status);
     return (
         <div>
         <div className="grid grid-cols-1 md:grid-cols-2 h-screen justify-end">
@@ -140,13 +155,75 @@ export default function Signup(props) {
             />
 
         </div>
+
+
+
+        <Modal sm visible={!fetching && complete}>
+            <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
+                <Lottie
+                    className={"w-full h-full"}
+                    options={{
+                        loop: false,
+                        autoplay: false,
+                        animationData: successAnimationData,
+                        renderSettings: {
+                            preserveAspectRatio: "xMidyMid slice"
+                        }
+                    }}
+                    isStopped={!complete}
+                    isClickToPauseDisabled={true}
+                    eventListeners={[{eventName: "complete", callback: () => setAskProceed(true)}]}
+                ></Lottie>
+                <h1 className="text-white text-4xl font-inter text-center"> Signup Successful </h1>
+            </div>
+        </Modal>
+
+        <Modal sm visible={askProceed}>
+            <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
+                <Lottie
+                    className={"w-full h-full"}
+                    options={{
+                        loop: true,
+                        autoplay: false,
+                        animationData: alertAnimation,
+                        renderSettings: {
+                            preserveAspectRatio: "xMidyMid slice"
+                        }
+                    }}
+                    isStopped={!askProceed}
+                    isClickToPauseDisabled={true}
+                ></Lottie>
+                <h1 className="text-white text-4xl font-inter text-center"> Login and proceed with this account? </h1>
+                
+                <div className="mt-10 w-full flex flex-col md:flex-row justify-center items-center gap-5">
+                    <button className="w-full p-4 rounded-md text-center text-white text-2xl font-roboto font-medium bg-emerald-500 hover:bg-transparent hover:border-2 hover:border-emerald-500 hover:text-emerald-500 transition-all ease-in-out" onClick={() => navigate("/dashboard")}> Yes</button>
+                    <button className="w-full p-4 rounded-md text-center text-white text-2xl font-roboto font-medium bg-rose-500 hover:bg-transparent hover:border-2 hover:border-rose-500 hover:text-rose-500 transition-all ease-in-out" onClick={() =>{localStorage.setItem(process.env.REACT_APP_USER_TOKEN, ""); setAskProceed(false); setComplete(false)}}> No </button>
+                </div>
+            </div>
+        </Modal>
+
+
+        <Modal sm visible={fetching}>
+            <div className="w-full h-full flex flex-col justify-center items-center" >
+                <Loader className="w-[80%] h-full fill-blue-500" />
+                <h1 className="text-white font-light text-4xl"> Signing up... </h1>
+            </div>
+        </Modal>
+
+        <Modal sm visible={failShow.status && !fetching} removable>
+            <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
+                <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
+                <h1 className="text-white text-4xl font-inter text-center"> Signup Failed </h1>
+                <h1 className="text-white text-4xl font-roboto text-center"> {failShow.message} </h1>
+            </div>
+        </Modal>
         
 
-        <div className={"absolute top-0 left-0 justify-center items-center fixed w-screen h-screen p-20 bg-black/60 " + (fetching ? "flex" : "hidden")}>
+        {/* <div className={"absolute top-0 left-0 justify-center items-center fixed w-screen h-screen p-20 bg-black/60 " + (fetching ? "flex" : "hidden")}>
             <div className="w-full md:w-1/3 lg:w-1/2 flex justify-center items-center h-5/6 bg-white">
                 <img src="loading.gif" /> 
             </div> 
-        </div>
+        </div> */}
                 
         </div>
     )
