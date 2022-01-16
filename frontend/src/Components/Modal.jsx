@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 
 export default function Modal(props) {
-   let {visible, sm, md, lg, removable} = props;
+   let {visible, sm, md, lg, removable, fullScreen} = props;
    let modalBackgroundName = "modal-back"
 
    let [sight, setSight] = useState(visible);
@@ -45,7 +45,7 @@ export default function Modal(props) {
             });
 
          }
-      }} name={modalBackgroundName} className={"absolute top-0 left-0 flex flex-wrap justify-center items-center w-full h-full bg-black/60 " + (sight ? "block" : "hidden")}>
+      }} name={modalBackgroundName} className={`absolute top-0 left-0 flex flex-wrap justify-center items-center ${fullScreen ? "w-screen h-screen" : "w-full h-full"} bg-black/60 ${sight ? "block" : "hidden"}`}>
       <motion.div animate={animationControl} variants={animationVariant} className={`relative ${sizeWidth} ${sizeHeight} h-[90%] overflow-y-auto overscroll-x-contain my-10 p-20  rounded-lg bg-gray-900`}>
          {props.children}
       </motion.div> 

@@ -7,12 +7,10 @@ import * as yup from 'yup'
 import {ReactComponent as LoginLoader} from "./../Assets/svg/loginLoad.svg"
 
 //Components
-import InputField from "../Components/InputField";
-
-import backend_settings from "../backend_settings";
 import FormCard from "../Components/FormCard";
 import Modal from "../Components/Modal";
 
+import backend_settings from "../backend_settings";
 
 export default function Login(props) {
 
@@ -26,7 +24,7 @@ export default function Login(props) {
         if(token) {
             setAskNavigate(true);
         } 
-    });
+    }, []);
 
 
     // Function Handlers
@@ -93,7 +91,6 @@ export default function Login(props) {
 
 
             <FormCard
-                rememberMe
                 header={{salutation: "Welcome back", title: "Login to your Account"}}
                 initialValues={initialValues}
                 validationSchema={validation}

@@ -5,4 +5,10 @@ let instance = axios.create({
    withCredentials: false
 });
 
+instance.defaults.headers = {
+   'Cache-Control': 'no-cache',
+   'Pragma': 'no-cache',
+   'Expires': '0',
+ };
+
 export default instance;

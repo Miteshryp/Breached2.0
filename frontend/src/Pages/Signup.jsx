@@ -23,10 +23,14 @@ function InputField(props) {
     )
 }
 
+
 export default function Signup(props) {
-
+    
     let navigate = useNavigate();
-
+    //hooks
+    let [fetching, setFetching] = useState(false);
+    let [signupSuccess, setSignupSuccess] = useState();
+    
     
     
     // Function Handlers
@@ -48,10 +52,6 @@ export default function Signup(props) {
             setFetching(false);
         }
     }
-    
-    //hooks
-    let [fetching, setFetching] = useState(false);
-    let [loginSuccess, setLoginSuccess] = useState();
     
     // preset data
     let header = {
@@ -116,7 +116,7 @@ export default function Signup(props) {
     useEffect(() => {
         let token = localStorage.getItem("token");
         if(token) navigate("dashboard"); 
-    });
+    }, []);
 
 
     

@@ -1,15 +1,18 @@
 import axios from "axios";
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router";
 import * as yup from "yup";
 import backend_settings from "../backend_settings";
 
 // Components
 import FormCard from "../Components/FormCard";
+import Modal from "../Components/Modal";
 
 export default function AdminLogin(props) {
-
+   const navigate = useNavigate();
    // hooks
    let [submitting, setSubmitting] = useState(false);
+   let [failShow, setFailShow] = useState({message: '', status: false});
 
    // preset data
    const 
@@ -44,18 +47,34 @@ export default function AdminLogin(props) {
    onSubmit = async (values, actions) => {
       console.log("Something");
       setSubmitting(true);
-      let response = await axios.post(backend_settings.adminLogin, values);
-      console.log(response.data);
-      if(!response.data.auth) {
-         console.log("Auth failed: " + response.status);
-         setSubmitting(false);
-         return;
+
+      try {
+         let response = await axios.post(backend_settings.adminLogin, values);
+         console.log(response.data);
+         
+         if(!response.data.auth) {
+            console.log("Auth failed: " + response.status);
+            setSubmitting(false);
+            setFailShow((prev) => {
+               prev.status = true;
+               prev.message = response.data.message;
+               return prev;
+            });
+            return;
+         }
+
+         console.log("Success");
+         localStorage.setItem("adminToken", response.data.token);
+         navigate("/adminDashboard", {replace: true});
+      } catch(err) {
+         console.log(err);
+         setFailShow((prev) => {
+            prev.status = true;
+            prev.message = err.data.message;
+            return prev;
+         });
       }
-
-
-      localStorage.setItem("adminToken", response.data.token);
       setSubmitting(false);
-      console.log("Success");
    },
    extraComponents = () => null;// { return <component(s)[array] to be rendered> }
 
@@ -65,7 +84,6 @@ export default function AdminLogin(props) {
    return (
       <div className="w-screen h-screen grid grid-cols-2">
          <div>
-
          </div>
 
          <div className="w-full h-screen flex justify-center items-center bg-[#120F05]">
@@ -80,6 +98,8 @@ export default function AdminLogin(props) {
                extraComponents={extraComponents}
             />
          </div>
+
+         <Modal visible={failShow.status && !submitting} md />
       </div>
    )   
 }

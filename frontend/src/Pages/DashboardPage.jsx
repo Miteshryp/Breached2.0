@@ -1,5 +1,5 @@
 import Dashboard from "./../Components/Dashboard"
-import { HomeIcon,ChartBarIcon,DocumentIcon, XIcon } from "@heroicons/react/solid";
+import { HomeIcon,ChartBarIcon,DocumentIcon } from "@heroicons/react/solid";
 import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
 import {ReactComponent as IeeeLogo} from "./../Assets/svg/ieee_logo.svg"
 import Login from "./Login";
@@ -7,6 +7,9 @@ import { useEffect, useState } from "react";
 import {ReactComponent as LoadingSVG} from "./../Assets/svg/loginLoad.svg"
 import Modal from "../Components/Modal";
 import QuestionScreen from "./Screens/QuestionScreen";
+
+import ContestScreen from "./Screens/ContestScreen"
+
 
 export default function DashboardPage() {
 
@@ -22,12 +25,12 @@ export default function DashboardPage() {
             setAuthenticated(true);
         }
         setChecked(true);
-    });
+    }, []);
 
     let screens = [
         {
             screenComponent: () => {
-                return <Login />
+                return <ContestScreen />
             },
             iconComponent: HomeIcon
         },
@@ -48,7 +51,7 @@ export default function DashboardPage() {
     return (
         <div>
             <div className={`${authenticated ? 'flex' : 'hidden'}`} >
-                <Dashboard screens={screens} HomeLogo={IeeeLogo}/>
+                <Dashboard screens={screens} HomeLogo={IeeeLogo} bgColor={"bg-sidebar"}  highlightColor={"bg-sidebar-highlight"}/>
             </div>
             <div className={``}>
 

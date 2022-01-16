@@ -103,7 +103,7 @@ exports.signup = async (req, res) => {
          .send({message: "Registration Failed: DB error", auth: false, fatal: true});
    }
 
-   let token = jwt.sign({...user}, secret);
+   let token = jwt.sign({...user}._doc, secret);
 
    logger.info("Successfully Signed Up");
    logger.debug({...user});

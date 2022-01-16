@@ -23,7 +23,7 @@ const logger = require("node-color-log");
 const yup = require("yup");
 
 const Contest = require("./../models/contest");
-
+const User  = require("./../models/participant");
 
 
 // ----------------------- Helper Functions ---------------------
@@ -71,6 +71,14 @@ function checkContestTime(contest) {
    return true;
 }
 
+async function isValidContest(contestID) {
+   if(!contestID || contestID === "") return false;
+   let contest = await Contest.findOne({_id: contestID});
+   
+   if(!contest) return false;
+   if(!checkContestTime(contest)) return false;
+   return true;
+}
 
 
 
@@ -85,90 +93,123 @@ function checkContestTime(contest) {
 
 // --------------------- Controller Functions --------------------------
 
-exports.getContest = async (req, res) => {
-   let {userData} = req;
-   let {contestID} = req.body;
 
-   let contest = await Contest.findOne({_id: contestID});
+// Returns the list of all active contest available for registration. If the user is already registered,
+// it returns a errorResponse with code 300.
 
-   if(!contest)
-      return errorResponse(res, "Invalid Contest ID");
-   return successResponse(res, "Contest successfully retrieved", {contest});
-}
+exports.getActiveContest = async (req, res) => {
+   let {currentContest: contestID} = req.userData;
+   logger.debug(req.userData);
 
-
-
-exports.getActiveContestList = async (req, res) => {
-   let {contestID} = req.body;
-   let {userData} = req;
-
-   let contest = await Contest.find({});
-
-   if(!contest)
-      return errorResponse(res, "Invalid ContestID");
+   let valid = await isValidContest(contestID);
+   logger.debug("Contest Valid: " + valid)
+   // User already registered in a contest. Access to active contest list is not allowed in this case.
+   if(valid) {
+      logger.error("Already Registered")
+      return errorResponse(res, "You are currently registered in an active contest, ans thus cannot access other contests", null, 300);
+   }
    
-   let contestList = [];
-   for(let i = 0; i < contest.length; i++) {
-      if(!checkContestTime(contest[i])) continue;
+   logger.info("User eligible to fetch contest list.");
+   
+   // Fetch all the contests in the database
+   let contests = await Contest.find({});
+   if(!contests)
+      return errorResponse(res, "Failed to fetch contests.", {fatal: true});
 
-      // @TODO: Want registered mark?
-      contestData = contest[i];
-      contestList.push(contestData);
+   // Filter out the passed out contests.
+   let currTime = new Date();
+   let contestList = [];
+   for(let i = 0; i < contests.length; i++) {
+      if(contests[i].endTime.getTime() < currTime.getTime()) continue;
+      contestList.push(contests[i]);
    }
 
-   return successResponse(res, "Contest data retrieved", {data: {contestList}});
+   logger.info("Contest List Retrieval Successful");
+   return successResponse(res, "Contests successfully retrieved", {data: {contestList}});
 }
 
 
 // Working
-exports.getContestList = async (req, res) => {
-   let {_id: userID} = req.userData;
-   const findFilter = {
-      _id: true,
-      name: true,
-      startTime: true,
-      endTime: true,
-      participant: true
-   }
+// exports.getActiveContestList = async (req, res) => {
+//    let {userData} = req;
 
-   let contest = await Contest.find({}, findFilter);
-   
-   if(!contest) 
-   return errorResponse(res, "Contests could not be retrived.");
-   
-   logger.debug("Got all contests");
-   
-   // Marking registered contest in the data.
-   let contestList = [];
-   for(let i = 0; i < contest.length; i++) {
-      // if(contest[i].endTime.getTime() < currTime.getTime()) continue;
-      let registered = false;
-      for(let j = 0; j < contest[i].participant.length; j++) {
-         if(contest[i].participant[j].participantID === userID) registered = true;
-      }
+//    // Do not return a list of active contest if user is already
+//    // registered in a contest. Frontend uses this to get the list 
+//    // to display the contests. This response indicates to show
+//    // the already registered message to the user.
+//    let valid = await isValidContest(userData.currentContest);
+//    if(valid)
+//       return errorResponse(res, "User already registered in a contest. (Multiple contest at a time is not supported for now) ", null, 300);
 
-      let contestData = {
-         registered,
-         contest: contest[i]
-      };
-      contestList.push(contestData);
-   }
+//    let contest = await Contest.find({});
 
-   logger.info("Returning List. ")
-   return successResponse(res, "Contests Breif Retrieved", {data: {contestList}});
-}
+//    if(!contest)
+//       return errorResponse(res, "Invalid ContestID");
+   
+//    let contestList = [];
+//    for(let i = 0; i < contest.length; i++) {
+//       if(!checkContestTime(contest[i])) continue;
+
+//       // Want registered mark?: No, not gonna support multiple contest for now
+//       contestData = contest[i];
+//       contestList.push(contestData);
+//    }
+
+//    return successResponse(res, "Contest data retrieved", {data: {contestList}});
+// }
+
+
+// Working
+// exports.getContestList = async (req, res) => {
+//    let {_id: userID} = req.userData;
+//    const findFilter = {
+//       _id: true,
+//       name: true,
+//       startTime: true,
+//       endTime: true,
+//       participant: true
+//    }
+
+//    let contest = await Contest.find({}, findFilter);
+   
+//    if(!contest) 
+//    return errorResponse(res, "Contests could not be retrived.");
+   
+//    logger.debug("Got all contests");
+   
+//    // Marking registered contest in the data.
+//    let contestList = [];
+//    for(let i = 0; i < contest.length; i++) {
+//       // if(contest[i].endTime.getTime() < currTime.getTime()) continue;
+//       let registered = false;
+//       for(let j = 0; j < contest[i].participant.length; j++) {
+//          if(contest[i].participant[j].participantID === userID) registered = true;
+//       }
+
+//       let contestData = {
+//          registered,
+//          contest: contest[i]
+//       };
+//       contestList.push(contestData);
+//    }
+
+//    logger.info("Returning List. ")
+//    return successResponse(res, "Contests Breif Retrieved", {data: {contestList}});
+// }
 
 
 
 // Working
 exports.getRegisteredContest = async (req, res) => {
    // userData is a decoded json object processed in verifyAuth middleware
-   // hence, the userID cannot is always secure to pass into database.
-   let userID = req.userData._id;
-   let contests = await Contest.find({"participant.participantID": userID});
+   // hence, the userID is always secure to pass into database.
+   // let userID = req.userData._id;
+   // let contests = await Contest.find({"participant.participantID": userID});
+   let {currentContest: contestID} = req.userData;
+   let contest = await Contest.findById(contestID);
 
-   if(!contests) return errorResponse(res, "Registered Contests could not be retrived");
-   return successResponse(res, "Registered Contests Retrieved.", {data: {contestList: contests}});
+   if(!contest) return errorResponse(res, "Registered Contest could not be retrived", {fatal: true});
+   return successResponse(res, "Registered Contest Retrieved.", {data: {contest}});
 }
 
 
@@ -181,7 +222,16 @@ exports.registerInContest = async (req, res) => {
 
 
    let {contestID} = req.body;
-   let {_id: userID} = req.userData;
+   let {_id: userID, currentContest} = req.userData;
+   let userData = req.userData;
+
+   logger.debug(currentContest);
+   // Preventing multiple contest registration
+   let valid = await isValidContest(currentContest);
+   if(valid) {
+      logger.error(`User not eligible for registration: ${userData.name}`);
+      return errorResponse(res, "User already registered in an active contest");
+   }
 
    // prevent duplicate entry
    let searchResponse = await Contest.findOne({_id: contestID, "participant.participantID": userID});
@@ -215,6 +265,11 @@ exports.registerInContest = async (req, res) => {
       });
    if(!insertResponse) return errorResponse(res, "Failed to update contest info", {fatal: true});
    
+   // update user
+   let response = await User.updateOne({_id: userID}, { "$set": {currentContest: contestID} });
+   if(!response)
+      return errorResponse(res, "Something went wrong", {fatal: true});
+   
    logger.info("Registration successful");
    return successResponse(res, "User registered successfully");
 }
@@ -223,7 +278,13 @@ exports.registerInContest = async (req, res) => {
 
 // Working
 exports.getLeaderboard = async (req, res) => {
-   let contestID = req.body.contestID;
+   let contestID = req.userData.currentContest;
+
+   // Cannot return a leaderboard to an invalid or inactive contest
+   let valid = await isValidContest(contestID);
+   if(!valid)
+      return errorResponse(res, "User not registered in an active contest", null, 300);
+
    let rankList = await generateLeaderboard(contestID);
 
    if(!rankList)
@@ -234,11 +295,20 @@ exports.getLeaderboard = async (req, res) => {
 }
 
 
+exports.getCombinedLeaderboard = async () => {
+   // Return a combined leaderboard from all the contests.
+}
+
+
 
 // Working
 exports.getSelfPoints = async (req, res) => {
-   let {contestID} = req.body;
-   let pid = req.userData._id;  
+   let {currentContest: contestID} = req.userData;
+   let pid = req.userData._id; 
+   
+   let valid = await isValidContest(contestID);
+   if(valid)
+      return errorResponse(res, "User not registered in an active contest", null, 300);
     
    let contest = await Contest.findOne({_id:contestID ,"participant.participantID": pid });
 
@@ -260,9 +330,11 @@ exports.getSelfPoints = async (req, res) => {
 
 exports.getSelfRank = async (req, res) => {
    let userData = req.userData;
-   let {contestID} = req.body;
+   let {currentContest: contestID} = userData;
 
-   logger.debug(contestID);
+   let valid = await isValidContest(contestID);
+   if(!valid)
+      return errorResponse(res, "User not registered in an active contest", null, 300);
 
    let rankList = await generateLeaderboard(contestID);
 
@@ -272,7 +344,7 @@ exports.getSelfRank = async (req, res) => {
       
    let rank = 0;
    for(let i = 0; i < rankList.length; i++) {
-      if(rankList[i].participantID.toString() === userData._id) {
+      if(String(rankList[i].participantID) === String(userData._id)) {
          rank = i+1;
          break;
       }
@@ -290,8 +362,9 @@ exports.getSelfRank = async (req, res) => {
 // Working
 // user submits an ans
 exports.submission = async(req, res) => {
-   let {answer, contestID} = req.body;
+   let {answer} = req.body;
    let userData = req.userData;
+   let {currentContest: contestID} = userData;
 
    logger.debug(answer, contestID);
 
@@ -306,7 +379,9 @@ exports.submission = async(req, res) => {
 
    let user = null;
    for(let i = 0; i < participants.length; i++) {
-      if(participants[i].participantID === userData._id) {
+      logger.debug(participants[i].participantID);
+      logger.debug(userData._id);
+      if(String(participants[i].participantID) === String(userData._id)) {
          user = participants[i];
          break;
       }
@@ -342,11 +417,11 @@ exports.submission = async(req, res) => {
       user.lastSubmissionTime = new Date();
    }
    else  {
-      logger.error("Incorrect ans");
+      logger.error(`Incorrect ans: ${user.name}`);
       return errorResponse(res, "Incorrect Answer", null, 210);
    }
 
-   logger.info("Correct Ans");
+   logger.info(`Correct ans: ${user.name}`);
    let timeStamp = new Date();
 
    // update the database;
@@ -361,10 +436,66 @@ exports.submission = async(req, res) => {
    });
 
    if(!updateResponse)
-      return errorResponse(res, "Failed to update the data")
+      return errorResponse(res, "Failed to update the data", {fatal: true});
 
    
    return successResponse(res, "Submission Successful");
+}
+
+exports.getCurrentQuestion =  async (req, res) => {
+   let {userData} = req;
+   let {_id: userID} = userData;
+
+   // Fetching user data to get current contest
+   logger.debug("Fetching user")
+   let user = await User.findById(userID);
+   if(!user)
+      return errorResponse(res, "Invalid User", {fatal:true});
+
+   // Checking if the contest is valid
+   logger.debug("Checking contest")
+   let valid = await isValidContest(userData.currentContest);
+   if(!valid) {
+      return errorResponse(res, "Contest is not valid. User either hasnt registered or the contest has ended.", null, 300);
+   }
+   
+   // Fetching contest details
+   logger.debug("Fetching contest")
+   let contest = await Contest.findById(user.currentContest);
+   if(!contest)
+      return errorResponse(res, "Could not fetch contest", {fatal: true});
+
+   // Finding the current question for the user
+   logger.debug("Finding question")
+   let currentQues = null;
+   for(let i = 0; i < contest.participant.length; i++) {
+      let contestant = contest.participant[i];
+      if(String(contestant.participantID) === String(userID)) {
+         currentQues = contestant.currentQues;
+         break;
+      }
+   }
+
+   if(!currentQues)
+      return successResponse(res, "All questions are answered", {complete: false}, 200);
+
+   // Fetching the current question details.
+   logger.debug("Fetching question")
+   let question = null;
+   for(let i = 0; i < contest.question.length; i++) {
+      let q = contest.question[i];
+      if(String(q.qid) === String(currentQues)) {
+         question = q;
+         break;
+      }
+   }
+
+   if(!question) 
+      return errorResponse(res, "Failed to fetch Question", {fatal: true});
+
+   // Found the question details.
+   logger.debug("Question retrieved succesfully")
+   return successResponse(res, "Question Fetched successfully", {data: {question}});
 }
 
 
@@ -393,7 +524,6 @@ exports.createContest = async(req, res) => {
 
    return successResponse(res, "Contest created successfully");
 }
-
 
 
 

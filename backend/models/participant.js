@@ -7,7 +7,8 @@ let schema = {
       type: Number
    },
    email: String,
-   password: String
+   password: String,
+   currentContest: String
 };
 
 const modelSchema = new mongoose.Schema(schema);

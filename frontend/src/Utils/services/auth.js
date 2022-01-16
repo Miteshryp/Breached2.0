@@ -1,6 +1,6 @@
 // import axios from "./../axios_setup"
 import axios from "axios"
-import settings from "./../backend_settings"
+import settings from "./../../backend_settings"
 
 async function login (credentials) {
    let response = await axios.post(settings.baseURL + settings.login, credentials);
@@ -34,10 +34,19 @@ async function logout () {
 async function getCredentialHeaders() {
    return {
       headers: {
+         "x-access-token": localStorage.getItem(process.env.REACT_APP_USER_TOKEN)
+      }
+   }
+}
+
+
+async function getNoCacheCredentialHeaders() {
+   return {
+      headers: {
          "x-access-token": localStorage.getItem("token")
       }
    }
 }
 
 
-export {login, logout, signup, getCredentialHeaders};
+export default {login, logout, signup, getCredentialHeaders, getNoCacheCredentialHeaders};
