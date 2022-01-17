@@ -4,6 +4,7 @@ import Navbar from "../Components/Navbar";
 
 import faqData from "./../Assets/data/faqData"
 import contactData from "./../Assets/data/contactData"
+import {ReactComponent as backgroundSvg} from "./../Assets/svg/tempBackground.svg"
 
 export default function LandingPage(props) {
     let navigate = useNavigate();

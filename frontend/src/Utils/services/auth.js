@@ -31,7 +31,7 @@ async function logout () {
    localStorage.setItem("token", null);
 }
 
-async function getCredentialHeaders() {
+function getCredentialHeaders() {
    return {
       headers: {
          "x-access-token": localStorage.getItem(process.env.REACT_APP_USER_TOKEN)
@@ -40,9 +40,12 @@ async function getCredentialHeaders() {
 }
 
 
-async function getNoCacheCredentialHeaders() {
+function getNoCacheCredentialHeaders() {
    return {
       headers: {
+         'Cache-Control': 'no-cache',
+         'Pragma': 'no-cache',
+         'Expires': '0',
          "x-access-token": localStorage.getItem("token")
       }
    }

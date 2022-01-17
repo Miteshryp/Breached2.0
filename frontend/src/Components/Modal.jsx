@@ -34,8 +34,8 @@ export default function Modal(props) {
       if(sight) animationControl.start("visible");
    }, [sight]);
 
-   let sizeWidth = ((lg | md | sm) ? (lg ? 'md:w-11/12' : ( md ? 'md:w-8/12' : 'w-1/2')) : 'md:w-full') + ' w-full';
-   let sizeHeight = ((lg | md | sm) ? ( lg ? 'h-[70%]' : (md ? ('h-50%') : "h-[30%]")) : 'h-[90%]') + ' md:h-[90%]';
+   let sizeWidth = ((lg | md | sm) ? (lg ? 'md:w-11/12' : ( md ? 'md:w-8/12' : 'w-1/3')) : 'md:w-full') + ' w-full';
+   let sizeHeight = ((lg | md | sm) ? ( lg ? 'h-[70%]' : (md ? ('h-50%') : "h-[25%]")) : 'h-[90%]') + ' md:h-[90%]';
    return (
       <div onClick={(e) => {
          if(removable && e.target.getAttribute('name') === modalBackgroundName) {

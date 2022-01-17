@@ -40,7 +40,7 @@ function ContestCard(props) {
             console.log(err);
             failSignal((prev) => {
                 prev.status = true;
-                prev.message = err.data.message;
+                prev.message = err.response.data.message;
                 return prev;
             })
             registerSignal(false);
@@ -51,6 +51,7 @@ function ContestCard(props) {
     let startDate = new Date(contest.startTime);
     let endDate = new Date(contest.endTime);
 
+    // from-[#009ffd] via-[#1b64b7] to-[#2288fd]
     return (
     <div className="group w-full h-full px-10 p-5 bg-size-200 bg-pos-0 hover:bg-pos-100 bg-gradient-to-b from-[#009ffd] via-[#1b64b7] to-[#2288fd] transition-all rounded-xl shadow-2xl shadow-[#009ffd]/25 hover:scale-110">
         <h1 className="text-white text-xl font-roboto font-bold transition-all"> {contest.name} </h1>
@@ -98,18 +99,10 @@ export default function ContestScreen(props) {
             if(response.data.complete) {
                 // console.log(response.data.data.contestList);
                 setContestList(response.data.data.contestList);
-                setFailShow((prev) => {
-                    prev.status = false;
-                    prev.message = "";
-                    return prev;
-                });
+                setFailShow({status: false, message: "" });
                 
             } else {
-                setFailShow((prev) => {
-                    prev.status = true;
-                    prev.message = response.data.message;
-                    return prev;
-                })
+                setFailShow({ status: true, message: response.data.message })
             }
 
             setFetching(false);
@@ -117,11 +110,7 @@ export default function ContestScreen(props) {
             console.log(err);
             // console.log(err.response);
             // console.log(err.data.message)
-            setFailShow((prev) => {
-                prev.status = true;
-                prev.message = (err.response && err.response.data ? err.response.data.message : err.message);
-                return prev;
-            })
+            setFailShow({status: true, message:  (err.response && err.response.data ? err.response.data.message : err.message)})
             setFetching(false);
         }
     }, [])
@@ -182,7 +171,7 @@ export default function ContestScreen(props) {
                 <h1 className="text-white text-6xl font-roboto font-medium"> Available Contests </h1>
             </div>
 
-            <div className="w-full h-full px-20 py-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <div className="w-full h-full px-20 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
             {
                 contestList && contestList.map((contest) => {

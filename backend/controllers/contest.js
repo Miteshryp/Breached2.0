@@ -106,7 +106,7 @@ exports.getActiveContest = async (req, res) => {
    // User already registered in a contest. Access to active contest list is not allowed in this case.
    if(valid) {
       logger.error("Already Registered")
-      return errorResponse(res, "You are currently registered in an active contest, ans thus cannot access other contests", null, 300);
+      return errorResponse(res, "You are currently registered in an active contest, and thus cannot access other contests", null, 300);
    }
    
    logger.info("User eligible to fetch contest list.");
@@ -417,7 +417,7 @@ exports.submission = async(req, res) => {
       user.lastSubmissionTime = new Date();
    }
    else  {
-      logger.error(`Incorrect ans: ${user.name}`);
+      logger.error(`Incorrect ans: ${userData.name}`);
       return errorResponse(res, "Incorrect Answer", null, 210);
    }
 
@@ -445,6 +445,7 @@ exports.submission = async(req, res) => {
 exports.getCurrentQuestion =  async (req, res) => {
    let {userData} = req;
    let {_id: userID} = userData;
+   let currTime = new Date();
 
    // Fetching user data to get current contest
    logger.debug("Fetching user")
@@ -456,7 +457,7 @@ exports.getCurrentQuestion =  async (req, res) => {
    logger.debug("Checking contest")
    let valid = await isValidContest(userData.currentContest);
    if(!valid) {
-      return errorResponse(res, "Contest is not valid. User either hasnt registered or the contest has ended.", null, 300);
+      return errorResponse(res, "You either haven't registered or the contest has ended.", null, 300);
    }
    
    // Fetching contest details
@@ -464,6 +465,9 @@ exports.getCurrentQuestion =  async (req, res) => {
    let contest = await Contest.findById(user.currentContest);
    if(!contest)
       return errorResponse(res, "Could not fetch contest", {fatal: true});
+
+   if(contest.startTime.getTime() > currTime.getTime())
+      return errorResponse(res, "Contest has not started yet.");
 
    // Finding the current question for the user
    logger.debug("Finding question")
