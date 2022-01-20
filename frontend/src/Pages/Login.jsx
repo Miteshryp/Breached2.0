@@ -1,11 +1,12 @@
-import axios from "./../Utils/axios_setup";
-import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
+// Libraries
+import Lottie from "react-lottie";
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router";
 import * as yup from 'yup'
 
+// Assets
+import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
 import {ReactComponent as LoginLoader} from "./../Assets/svg/loginLoad.svg"
-
 import * as successAnimationData from "./../Assets/animations/successAnimation.json"
 import * as alertAnimation from "./../Assets/animations/alertAnimation.json"
 
@@ -13,8 +14,12 @@ import * as alertAnimation from "./../Assets/animations/alertAnimation.json"
 import FormCard from "../Components/FormCard";
 import Modal from "../Components/Modal";
 
+// services/metadata
+import axios from "./../Utils/axios_setup";
 import backend_settings from "../backend_settings";
-import Lottie from "react-lottie";
+
+
+
 
 export default function Login(props) {
     
@@ -89,8 +94,8 @@ export default function Login(props) {
     }
 
     let validation = yup.object().shape({
-        regNo: yup.string().matches(/^[0-9]+$/).min(9).max(9).required(),
-        password: yup.string().required()
+        regNo: yup.string().matches(/^[0-9]+$/, "RegNo: Must be a number").min(9, "9 digits required").max(9, "9 digits only").required("Required"),
+        password: yup.string().required("Required")
     })
 
     

@@ -8,5 +8,6 @@ export default {
     activeContestList: baseURL + '/contest/getActiveContest',
     register: baseURL + '/contest/register',
     submit: baseURL + '/contest/submit',
-    getCurrentQuestion: baseURL + '/contest/getCurrentQuestion'
+    getCurrentQuestion: baseURL + '/contest/getCurrentQuestion',
+    getOverallLeaderboard: baseURL + '/contest/getOverallLeaderboard'
 };

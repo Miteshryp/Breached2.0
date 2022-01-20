@@ -1,15 +1,21 @@
-import axios from "axios";
+// Library imports
+import Lottie from "react-lottie";
 import { useEffect, useState } from "react"
-import backend_settings from "./../../backend_settings";
+
+// Services
+import axios from "./../../Utils/axios_setup";
 import services from "./../../Utils/services"
+
+// Component imports
 import QuestionCard from "../../Components/QuestionCard"
 import Modal from "../../Components/Modal";
 
-import Lottie from "react-lottie";
+// Meta data
+import backend_settings from "./../../backend_settings";
 
+// Assets imports
 import {ReactComponent as Loader} from "./../../Assets/svg/loginLoad.svg"
 import {ReactComponent as FailLogo} from "./../../Assets/svg/failFaceLogo.svg"
-
 import * as successAnimationData from "./../../Assets/animations/successAnimation.json"
 import * as alertAnimation from "./../../Assets/animations/alertAnimation.json"
 
@@ -20,6 +26,7 @@ export default function QuestionScreen() {
     let [failShow, setFailShow] = useState({message: '', status: false});
     let [question, setQuestion] = useState(null);
     let [submitSuccess, setSubmitSuccess] = useState(false);
+    let [incorrect, setIncorrect] = useState(false);
 
     let [refresh, setRefresh] = useState(1);
 
@@ -28,12 +35,10 @@ export default function QuestionScreen() {
     }, []);
 
     useEffect(async () => {
-        console.log("Effect here")
         try {
             setFetching(true);
             let fetch = await axios.get(backend_settings.getCurrentQuestion, services.auth.getNoCacheCredentialHeaders());
-            console.log(fetch);
-
+    
             if(fetch.data.complete) {
                 console.log("Fetch Successful")
                 setQuestion(fetch.data.data.question);
@@ -56,24 +61,27 @@ export default function QuestionScreen() {
         } finally {
             setFetching(false);
         }
-        console.log("Effect End");
     }, [refresh]);
 
     return (
         <div>
         
-        <div className="absolute w-full h-full bg-gray-600 -z-50">
+        {/* Background */}
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-600 -z-50">
         </div>
 
+        {/* Question Card */}
         { question && 
         <div className={`px-14 py-10 w-full h-screen ${failShow.title === "Questions not available" && !fetching ? 'hidden' : ''} `}>
-            <QuestionCard question={question} signalSubmit={setFetching} signalSuccess={setSubmitSuccess} signalFail={setFailShow} />
+            <QuestionCard question={question} signalSubmit={setFetching} signalSuccess={setSubmitSuccess} signalFail={setFailShow} signalWrongAnswer={setIncorrect}/>
         </div>
         }
 
-        <div className={`w-full h-full lg:w-screen ${failShow.status || fetching ? '' : 'hidden'} bg-gray-500`}>
+        {/* Modal background */}
+        <div className={`fixed top-0 left-0 w-full h-full lg:w-screen ${failShow.status || fetching ? '' : 'hidden'} bg-gray-500`}>
         </div>
 
+        {/* Loading Modal */}
         <Modal sm visible={fetching} fullScreen>
                 <div className="w-full h-full flex flex-col justify-center items-center" >
                     <Loader className="w-[80%] h-full fill-blue-500" />
@@ -81,14 +89,39 @@ export default function QuestionScreen() {
                 </div>
         </Modal>
 
-        <Modal sm visible={failShow.status && !fetching} removable fullScreen>
+
+        {/* Failure Modal */}
+        <Modal md visible={failShow.status && !fetching} fullScreen>
             <div className="w-full h-full flex flex-col justify-center items-center gap-5" >
-                <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
+                {/* <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo> */}
+                <Lottie
+                    options={{
+                        animationData: alertAnimation,
+                        loop: true,
+                        autoplay: false,
+                        rendererSettings: {
+                            preserveAspectRatio: 'xMidYMid slice'
+                          }
+                    }}
+                    width={300} height={300}
+                    isStopped={!failShow.status}
+                />
                 <h1 className="text-white text-4xl font-inter text-center"> {failShow.title}</h1>
                 <h1 className="text-white text-4xl font-roboto text-center"> {failShow.message} </h1>
             </div>
         </Modal>
 
+        {/* Incorrect Answer  */}
+        <Modal sm visible={incorrect && !fetching} removable fullScreen>
+            <div className="w-full h-full flex flex-col justify-center items-center gap-5" >
+                <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
+                <h1 className="text-white text-4xl font-inter text-center"> Incorrect Answer </h1>
+                {/* <h1 className="text-white text-4xl font-roboto text-center">  </h1> */}
+            </div>
+        </Modal>
+
+
+        {/* Success Modal  */}
         <Modal sm visible={!fetching && submitSuccess}>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <Lottie

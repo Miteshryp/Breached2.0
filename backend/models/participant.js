@@ -4,7 +4,7 @@ let schema = {
    name: String,
    regNo: {
       required: true, 
-      type: Number
+      type: String
    },
    email: String,
    password: String,

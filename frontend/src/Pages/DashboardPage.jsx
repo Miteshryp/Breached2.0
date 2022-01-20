@@ -1,15 +1,20 @@
+// React imports
+import { useEffect, useState } from "react";
+
+// Components
 import Dashboard from "./../Components/Dashboard"
+import Modal from "../Components/Modal";
+
+// Assets data
 import { HomeIcon,ChartBarIcon,DocumentIcon } from "@heroicons/react/solid";
 import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
 import {ReactComponent as IeeeLogo} from "./../Assets/svg/ieee_logo.svg"
-import Login from "./Login";
-import { useEffect, useState } from "react";
 import {ReactComponent as LoadingSVG} from "./../Assets/svg/loginLoad.svg"
-import Modal from "../Components/Modal";
+
+// Screen
 import QuestionScreen from "./Screens/QuestionScreen";
-
 import ContestScreen from "./Screens/ContestScreen"
-
+import LeaderboardScreen from "./Screens/LeaderboardScreen";
 
 export default function DashboardPage() {
 
@@ -42,7 +47,7 @@ export default function DashboardPage() {
         },
         {
             screenComponent: () => {
-                return <h1> Element 3</h1>
+                return <LeaderboardScreen />// <h1> Element 3</h1>
             },
             iconComponent: ChartBarIcon
         },

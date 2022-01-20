@@ -1,11 +1,45 @@
-import axios from "axios";
-import { useState } from "react";
-import backend_settings from "../backend_settings";
+// Library imports
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Document,Page,pdfjs } from "react-pdf";
+
+
+// import { pdfjs } from 'react-pdf';
+// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+// Utility features
+import axios from "./../Utils/axios_setup";
 import services from "../Utils/services";
 
+// Meta data
+import backend_settings from "../backend_settings";
+import PdfDocument from "./PdfDocument";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
 export default function QuestionCard(props) {
-    let {question, signalSubmit, signalSuccess, signalFail} = props;
+    let {question, signalSubmit, signalSuccess, signalFail, signalWrongAnswer} = props;
+    // let answer = useRef()
     let [answer, setAnswer] = useState("")
+
+    // for pdf
+    let [page, setPage] = useState(0);
+
+    // let parentRef = useCallback((node) => {
+    //     console.log("Called memo")
+    //     if(node) {
+    //         setPdfWidth(node.getBoundingClientRect().width);
+    //         setPdfHeight(node.getBoundingClientRect().height);
+    //     }
+    // });
+
+    let parentRef = useRef(null);
+
+    // let [pdfWidth, setPdfWidth] = useState(200);
+    // let [pdfHeight, setPdfHeight] = useState(200);
+
+    useEffect(() => {
+    }, [parentRef]);
+    
 
     const handleAnswerChange = (event) => {
         setAnswer(event.target.value);
@@ -20,10 +54,12 @@ export default function QuestionCard(props) {
                 console.log("Submission Successful");
                 signalSuccess(true);
                 signalFail({ message: '', status: false});
+                signalWrongAnswer(false);
             } else {
                 console.log("Submission Failed");
                 signalSuccess(false);
-                signalFail({title: "Submission Failed",message: fetch.data.message, status: true});
+                // signalFail({title: "Submission Failed",message: fetch.data.message, status: true});
+                signalWrongAnswer(true);
             }
 
             signalSubmit(false);
@@ -42,10 +78,19 @@ export default function QuestionCard(props) {
         }
     }
 
+    // window.onresize = () => {
+    //     if(parentRef.current) {
+    //     setPdfWidth(parentRef.current.getBoundingClientRect().width);
+    //     setPdfHeight(parentRef.current.getBoundingClientRect().height);
+    //     } else {
+    //         console.log("Tried to reset but parentRef is empty");
+    //     }
+    // }
+
     return (
         <div className="w-full h-fit lg:h-full p-20  rounded-2xl bg-card">
             <div className="h-[90%] p-4 my-10 lg:my-0 flex flex-col lg:flex-row justify-start lg:justify-center gap-10 lg:gap-5">
-                <div className="w-full lg:w-7/12 h-auto flex flex-col gap-4 lg:justify-start">
+                <div className="w-full lg:w-7/12 h-auto flex flex-col gap-4 lg:justify-start" ref={parentRef}>
                     <h1 className="text-white text-4xl font-medium font-roboto">{question.title ? question.title : "No Title"}</h1>
 
                     <div className="w-full h-fit lg:h-[80%] lg:overflow-y-auto scrollbar-none">
@@ -57,17 +102,42 @@ export default function QuestionCard(props) {
 
                 </div>
 
-                <div className="h-full w-full lg:w-5/12 flex flex-col justify-center items-center">
+                <div className="h-full w-full lg:w-4/12 flex flex-col justify-center items-center">
                     <div className="h-fit w-fit flex flex-col mx-auto justify-center items-center">
-                        { question.clueMedia &&
+                        { question.clueMedia && (
                             question.clueMedia.map((element) => {
                                 if(element.contentType === "audio") {
-                                    return <audio src={element.url} />
+                                    return (
+                                    <audio controls>
+                                        <source src={element.url} />
+                                    </audio>
+                                    )
                                 } else if(element.contentType === "image") {
                                     return <img src={element.url} ></img>
+                                } else if(element.contentType === "pdf") {
+                                    return (
+                                    // <Document 
+                                    //     className={"w-full"}
+                                    //     file={{url: element.url}}
+                                    //     onLoadSuccess={({numPages}) => {
+                                    //         console.log("PDF loaded");
+                                    //         console.log(numPages);
+                                    //         setPage(1);
+                                    //     }}
+                                    //     onLoadProgress={() => {
+                                    //         console.log("Progress");
+                                    //     }}
+                                    //     onLoadError={() => {
+                                    //         console.log("ERROR loading pdf");
+                                    //     }}>
+                                    //     <Page pageNumber={page} width={pdfWidth - 300} height={pdfHeight - 200} />
+                                    // </Document>
+                                    <PdfDocument url={element.url} parentReference={parentRef}></PdfDocument>
+                                    )
                                 }
                                 return <div></div>
                             })
+                            )
                         }
                     </div>
                 </div>
@@ -75,7 +145,7 @@ export default function QuestionCard(props) {
 
             <div className="w-full h-fit flex flex-col lg:flex-row justify-center items-center lg:justify-start lg:items-start">
                 <div  className="h-fit flex flex-col justify-center items-center lg:flex-row lg:justify-start lg:items-start">
-                    <input className="w-full lg:w-80 h-14  lg:h-14 p-2 mx-6 lg:my-0 rounded text-center text-3xl font-inter font-bold" type="text" value={answer} onChange={handleAnswerChange} />
+                    <input className="w-full lg:w-80 h-14  lg:h-14 p-2 mx-6 lg:my-0 rounded text-center text-3xl font-inter font-bold" type="text" value={answer.current} onChange={handleAnswerChange} />
                     <button onClick={() => {
                         submitAnswer();
                     }} className="w-full lg:w-40 h-full        p-4 my-4 lg:my-0 rounded text-center text-md font-roboto font-medium bg-sky-400  transition-all ease-in-out hover:scale-110 hover:text-white " type="button" > Submit </button>

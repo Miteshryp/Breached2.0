@@ -1,10 +1,18 @@
+// Libraries
 import { useNavigate } from "react-router";
+
+// Components
 import FaqCard from "../Components/FAQCard";
 import Navbar from "../Components/Navbar";
 
+// services/metadata
 import faqData from "./../Assets/data/faqData"
 import contactData from "./../Assets/data/contactData"
 import {ReactComponent as backgroundSvg} from "./../Assets/svg/tempBackground.svg"
+
+
+
+
 
 export default function LandingPage(props) {
     let navigate = useNavigate();
@@ -38,14 +46,14 @@ export default function LandingPage(props) {
     }
     return (
         <div>
-            <div id="intro" className="absolute w-screen h-[300vh] -z-50 bg-landing blur-lg opacity-40">
+            <div id="intro" className="fixed top-0 left-0 w-screen h-[300vh] -z-50 bg-landing blur-lg opacity-100">
             </div>
-            <div className='px-10 md:px-20 w-screen h-[300vh] bg-[#000000] mix-blend-screen'>
+            <div className='px-10 md:px-20 w-full h-[300vh] bg-[#000000] mix-blend-screen'>
                 <Navbar links={linkArr} />
 
                 {/* Intro Section */}
                 <div className="flex flex-col gap-10 h-[70vh] px-0 lg:px-[13.5rem] justify-center items-center" >
-                    <h1 className=" font-bold text-white text-6xl md:text-8xl text-center [font-family: inter]"> BREACHED 2.0 WITH IEEE SB MUJ</h1>
+                    <h1 className=" font-bold text-white text-6xl md:text-8xl text-center [font-family: inter]"> BREACHED 2.0 PATIENT ZERO</h1>
                     <p  className=" font-medium [font-family: Inter] text-white/80 text-center text-xl"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo </p>
                 </div>
 

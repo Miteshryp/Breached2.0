@@ -28,6 +28,8 @@ const schema = {
          type: String,
          required: true
       },
+      name: String,
+      regNo: String,
       score: Number,
       lastSubmissionTime: Date, // size will be same as the questions
       currentQues: String

@@ -1,14 +1,21 @@
-import axios from "axios"//"./../../Utils/axios_setup"
-import backend from "../../backend_settings";
+// Library imports
+import Lottie from "react-lottie";
 import { useEffect, useState } from "react";
+
+// Components
 import Modal from "./../../Components/Modal"
 
+// services and meta
+import axios from "./../../Utils/axios_setup"
+import backend from "../../backend_settings";
+
+// Assets
 import {ReactComponent as FailLogo} from "./../../Assets/svg/failFaceLogo.svg"
 import {ReactComponent as LoginLoader} from "./../../Assets/svg/loginLoad.svg"
-
+import * as successAnimationData from "./../../Assets/animations/successAnimation.json"
 
 function ContestCard(props) {
-    let {contest, registerSignal, failSignal} = props;
+    let {contest, registerSignal, failSignal, successSignal} = props;
 
     let registerContest = async function() {
         registerSignal(true);
@@ -21,10 +28,9 @@ function ContestCard(props) {
             });
             if(response.data.complete) {
                 console.log("Registration successful");
-                failSignal((prev) => {
-                    prev.status = false;
-                    return prev;
-                })
+                failSignal({status: false})
+                successSignal(true);
+                registerSignal(false);
             }
             else {
                 console.log("Registration could not be completed")
@@ -79,6 +85,8 @@ export default function ContestScreen(props) {
     let [failShow, setFailShow] = useState({message: '', status: false});
     let [contestList, setContestList] = useState();
     let [fetching, setFetching] = useState(false);
+    let [success, setSuccess] = useState(false);
+    let [refresh, setRefresh] = useState(0);
     // map an array to the contestID
 
     useEffect(async () => {
@@ -102,6 +110,7 @@ export default function ContestScreen(props) {
                 setFailShow({status: false, message: "" });
                 
             } else {
+                setContestList(null);
                 setFailShow({ status: true, message: response.data.message })
             }
 
@@ -110,9 +119,14 @@ export default function ContestScreen(props) {
             console.log(err);
             // console.log(err.response);
             // console.log(err.data.message)
+            setContestList(null)
             setFailShow({status: true, message:  (err.response && err.response.data ? err.response.data.message : err.message)})
             setFetching(false);
         }
+    }, [refresh]);
+
+    useEffect(() => {
+        setRefresh(prev => prev++);
     }, [])
 
 
@@ -159,7 +173,7 @@ export default function ContestScreen(props) {
     return (
         <div>
 
-        <div className={`w-screen h-screen absolute left-0 top-0 bg-gray-900 -z-20`}>
+        <div className={`w-screen h-screen fixed left-0 top-0 bg-gray-900 -z-20`}>
         </div>
 
         {/* Main Display Contest page */}
@@ -176,7 +190,7 @@ export default function ContestScreen(props) {
             {
                 contestList && contestList.map((contest) => {
                     return (
-                        <ContestCard contest={contest} failSignal={setFailShow} registerSignal={setRegistering} />
+                        <ContestCard contest={contest} failSignal={setFailShow} registerSignal={setRegistering} successSignal={setSuccess}/>
                     )
                 })
                 
@@ -226,11 +240,31 @@ export default function ContestScreen(props) {
                 </div>
         </Modal>
 
-        <Modal sm fullScreen visible={failShow.status && !fetching && !registering}>
+        <Modal md fullScreen visible={failShow.status && !fetching && !registering}>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
                 <h1 className="text-white text-4xl font-inter text-center"> Fetch Failed </h1>
                 <h1 className="text-white text-4xl font-roboto text-center"> {failShow.message} </h1>
+            </div>
+        </Modal>
+
+        <Modal sm visible={!fetching && success} fullScreen>
+            <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
+                <Lottie
+                    className={"w-full h-full"}
+                    options={{
+                        loop: false,
+                        autoplay: false,
+                        animationData: successAnimationData,
+                        renderSettings: {
+                            preserveAspectRatio: "xMidyMid slice"
+                        }
+                    }}
+                    isStopped={!success}
+                    isClickToPauseDisabled={true}
+                    eventListeners={[{eventName: "complete", callback: () => { setRefresh(prev => ++prev); setSuccess(false); setRegistering(false); }}]}
+                ></Lottie>
+                <h1 className="text-white text-4xl font-inter text-center"> Registration Successful </h1>
             </div>
         </Modal>
 

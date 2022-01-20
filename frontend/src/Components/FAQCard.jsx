@@ -1,4 +1,3 @@
-import { data } from "autoprefixer";
 import { useState } from "react"
 import {ReactComponent as Dropdown} from "./../Assets/svg/dropdown.svg"
 

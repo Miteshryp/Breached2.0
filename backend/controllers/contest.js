@@ -43,12 +43,12 @@ const successResponse = function(res,responseMsg, extraFields = null, statusCode
 // Working
 async function generateLeaderboard(contestID) {
    let contest = await Contest.findOne({_id: contestID});
-   let participants = contest.participant;
+   let dbParticipants = contest.participant;
 
    if(!contest) return null;
 
    const handleTimeCompare = (a,b) => {
-      let diff = b.lastSubmissionTime.getTime() - a.lastSubmissionTime.getTime();
+      let diff =  (a.submissionTime ? a.lastSubmissionTime.getTime() : Infinity) - (b.lastSubmissionTime ? b.lastSubmissionTime.getTime() : Infinity);
       return diff;
    }
    
@@ -57,11 +57,92 @@ async function generateLeaderboard(contestID) {
       return a.score > b.score ? -1 : 1;
    }
    
-   participants.sort((p1, p2) => {
+   dbParticipants.sort((p1, p2) => {
       return handleScoreCompare(p1, p2);
    });
+    
+   console.log(dbParticipants)
+   return [contest.name, dbParticipants];
+}
 
-   return participants;
+async function generateOverallLeaderboard() {
+   let contests = await Contest.find({}, {participant: true, lastSubmissionTime: true, _id: false});
+   if(!contests) {
+      logger.error("Failed to fetch contest data in [generateOverallLeaderboard]");
+      return null;
+   }
+   // let rankList = [{name: "Mitesh", score: 3}, {name: "Micky", score: 5}];
+   // let index = rankList.findIndex((element, index) => {
+   //    console.log(element)
+   //    if(element.name === "Mitesh") return true;
+   // });
+   // console.log(index);
+
+
+
+   let rankList = [];
+   contests.forEach((contest) => {
+      // console.log(contest)
+
+      contest.participant.forEach((contestant) => {
+         let index = rankList.findIndex((element) => {
+            if(String(element.regNo) ===  String(contestant.regNo)) {
+               return true;
+            }
+         });
+
+         logger.info(index);
+
+         if(index >= 0) {
+            logger.warn("Entering for: " + rankList[index].regNo);
+            // updating score
+            rankList[index].score += contestant.score;
+            
+            // updating latest submission
+            if(!rankList[index].lastSubmissionTime) {
+               rankList[index].lastSubmissionTime = new Date(contestant.lastSubmissionTime);
+            } else {
+               rankList[index].lastSumissionTime = (rankList[index].lastSubmissionTime.getTime() < contestant.lastSubmissionTime.getTime() ?  contestant.lastSubmissionTime : rankList[index].lastSubmissionTime);
+            }
+            // console.log(currLas)
+         } else {
+            logger.error("Pushing: ");
+            logger.error(contestant);
+            // logger.error("Current rankList");
+            // logger.debug(rankList);
+            rankList.push(contestant);
+         }
+      })
+
+      logger.debug(rankList);
+   });
+
+
+   rankList.sort((c1, c2) => {
+      if(c1.score > c2.score) return -1
+      else if(c2.score > c1.score) return 1;
+      else {
+         if(c1.lastSubmissionTime.getTime() <= c2.lastSubmissionTime.getTime()) return -1;
+         else return 1;
+      }
+   })
+
+   return rankList;
+}
+
+exports.getOverallLeaderboard = async (req, res) => {
+   logger.debug("User Data: ");
+   logger.debug(req.userData);
+   let rankList = await generateOverallLeaderboard();
+   if(!rankList)
+      return res.status(300).send({message: "Failed to fetch the Leaderboard"})
+
+   let index = rankList.findIndex((element) => {
+      if(element.participantID === String(req.userData._id)) return true;
+   })
+   logger.debug("Rank: " + index );
+   
+   return successResponse(res,"Leaderboard generated successfully", {data: {rankList, rank: index + 1}});
 }
 
 
@@ -251,6 +332,8 @@ exports.registerInContest = async (req, res) => {
    
    let userRegister = {
       participantID: userID,
+      name: userData.name,
+      regNo: userData.regNo,
       score: 0,
       lastSubmissionTime: null,
       currentQues: contest.question[0].qid 
@@ -279,19 +362,27 @@ exports.registerInContest = async (req, res) => {
 // Working
 exports.getLeaderboard = async (req, res) => {
    let contestID = req.userData.currentContest;
-
+   let userData = req.userData;
    // Cannot return a leaderboard to an invalid or inactive contest
-   let valid = await isValidContest(contestID);
-   if(!valid)
-      return errorResponse(res, "User not registered in an active contest", null, 300);
+   // let valid = await isValidContest(contestID);
+   // if(!valid)
+      // return errorResponse(res, "User not registered in an active contest", null, 300);
 
-   let rankList = await generateLeaderboard(contestID);
+   let [contestName, rankList] = await generateLeaderboard(contestID);
 
+   let rank = -1;
+   for(let i = 0; i < rankList.length; i++) {
+      if(String(rankList[i].participantID) === String(userData._id)) {
+         rank = i+1;
+         break;
+      }
+   }
+
+   console.log(contestName);
    if(!rankList)
       return errorResponse(res, "Leaderboard could not be fetched!");
    
-
-   return successResponse(res, "Leaderboard fetched", {data: {rankList}});
+   return successResponse(res, "Leaderboard fetched", {data: {contestName, rankList, rank}});
 }
 
 
@@ -421,6 +512,9 @@ exports.submission = async(req, res) => {
       return errorResponse(res, "Incorrect Answer", null, 210);
    }
 
+   logger.debug("User Contents: ");
+   logger.debug(user);
+
    logger.info(`Correct ans: ${user.name}`);
    let timeStamp = new Date();
 
@@ -529,6 +623,10 @@ exports.createContest = async(req, res) => {
    return successResponse(res, "Contest created successfully");
 }
 
+
+exports.getDescription = async () => {
+
+}
 
 
 // ------------------- Testing -------------------------

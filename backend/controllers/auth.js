@@ -9,7 +9,7 @@ const logger = require("node-color-log");
 
 exports.login = async (req,res) => {
    let {regNo, password} = req.body;
-   let user = await Participant.findOne({regNo});
+   let user = await Participant.findOne({regNo: String(regNo)});
 
    if(!user)
       return res

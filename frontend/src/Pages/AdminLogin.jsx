@@ -1,12 +1,18 @@
-import axios from "axios";
+// Libraries
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import * as yup from "yup";
+
+// services and metadata
+import axios from "./../Utils/axios_setup";
 import backend_settings from "../backend_settings";
 
 // Components
 import FormCard from "../Components/FormCard";
 import Modal from "../Components/Modal";
+
+
+
 
 export default function AdminLogin(props) {
    const navigate = useNavigate();

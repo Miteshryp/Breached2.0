@@ -37,7 +37,7 @@ export default function Modal(props) {
    let sizeWidth = ((lg | md | sm) ? (lg ? 'md:w-11/12' : ( md ? 'md:w-8/12' : 'w-1/3')) : 'md:w-full') + ' w-full';
    let sizeHeight = ((lg | md | sm) ? ( lg ? 'h-[70%]' : (md ? ('h-50%') : "h-[25%]")) : 'h-[90%]') + ' md:h-[90%]';
    return (
-      <div onClick={(e) => {
+      <div className="fixed top-0 left-0 w-full h-full" onClick={(e) => {
          if(removable && e.target.getAttribute('name') === modalBackgroundName) {
             console.log("works")
             animationControl.start("hidden").then(() => {

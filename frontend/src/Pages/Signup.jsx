@@ -1,21 +1,22 @@
+// Library imports
+import Lottie from "react-lottie";
 import axios from "axios";
-import { Formik }  from "formik"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router";
 import * as yup from 'yup'
 
+// Components
 import Modal from "../Components/Modal";
-import Lottie from "react-lottie";
+import FormCard from "../Components/FormCard";
 
+// Assets
 import * as successAnimationData from "./../Assets/animations/successAnimation.json"
 import * as alertAnimation from "./../Assets/animations/alertAnimation.json"
-
-
 import {ReactComponent as Loader} from "./../Assets/svg/loginLoad.svg"
 import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
 
+// metadata
 import backend_settings from "../backend_settings";
-import FormCard from "../Components/FormCard";
 
 function InputField(props) {
     let {name, label, value, placeholder, onChange, type} = props
