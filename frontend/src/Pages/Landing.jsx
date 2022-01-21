@@ -58,7 +58,7 @@ export default function LandingPage(props) {
                 </div>
 
                 <div className="w-full mb-24 flex flex-col md:flex-row gap-6 justify-center items-center">
-                    <button onClick={signupRedirect} className="w-9/12 md:w-3/12 h-12 rounded-sm text-white text-xl font-bold font-inter bg-[#ED8936] hover:scale-110 transition-all duration-300"> Register </button>
+                    <button onClick={signupRedirect} className="w-9/12 md:w-3/12 h-12 rounded-sm text-white text-xl font-bold font-inter bg-[#fd7e17] hover:scale-110 transition-all duration-300"> Register </button>
                     <button onClick={faqRedirect}    className="w-9/12 md:w-3/12 h-12 rounded-sm text-white text-xl font-bold font-inter bg-transparent outline-1 outline-white outline-double transition-all duration-300 hover:bg-white hover:text-black"> Learn More </button> 
                 </div>
 

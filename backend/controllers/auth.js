@@ -7,6 +7,18 @@ const saltRounds = Number(process.env.SALT_ROUNDS);
 const Participant = require("./../models/participant");
 const logger = require("node-color-log");
 
+const errorResponse = function(res, errorMsg, extraFields = null, statusCode = 500) {
+   return res
+      .status(statusCode)
+      .send(extraFields ? {message: errorMsg, complete: false, ...extraFields} : {message: errorMsg, complete: false});
+}
+const successResponse = function(res,responseMsg, extraFields = null, statusCode = 200) {
+   return res
+      .status(statusCode)
+      .send(extraFields ? {message: responseMsg, complete: true, ...extraFields} : {message: responseMsg, complete: true});
+}
+
+
 exports.login = async (req,res) => {
    let {regNo, password} = req.body;
    let user = await Participant.findOne({regNo: String(regNo)});
@@ -119,4 +131,12 @@ exports.signup = async (req, res) => {
 
 exports.logout = async(req, res) => {
    return res.status(200).send({message: "Logout successful (save the token returned)", token: null});
+}
+
+
+exports.getAccountDetails = async (req, res) => {
+   if(!req.userData)
+      return errorResponse(res, "User Data fetch Failed", {fatal: true});
+   
+   return successResponse(res, "Account details fetched", {data: {account: req.userData}});
 }

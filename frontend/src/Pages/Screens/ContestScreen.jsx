@@ -173,7 +173,7 @@ export default function ContestScreen(props) {
     return (
         <div>
 
-        <div className={`w-screen h-screen fixed left-0 top-0 bg-gray-900 -z-20`}>
+        <div className={`w-screen h-screen fixed left-0 top-0 bg-dashboard -z-20`}>
         </div>
 
         {/* Main Display Contest page */}

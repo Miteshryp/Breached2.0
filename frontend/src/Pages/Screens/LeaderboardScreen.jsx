@@ -47,7 +47,7 @@ export default function LeaderboardScreen(props) {
 
     return (
         <div>
-            <div className="fixed w-screen h-screen top-0 left-0 bg-gray-900 -z-10"></div>
+            <div className="fixed w-screen h-screen top-0 left-0 bg-dashboard -z-10"></div>
             {( responseData &&
             <div className={`p-10 flex flex-col justify-center items-center`}>
                 <h1 className="text-white text-5xl font-inter font-medium">Leaderboard</h1>

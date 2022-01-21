@@ -5,6 +5,7 @@ export default {
     signup: baseURL + "/user/signup",
     adminLogin: baseURL + "/user/admin/login",
     logout: baseURL + "/logout",
+    accountDetails: baseURL + "/user/account",
     activeContestList: baseURL + '/contest/getActiveContest',
     register: baseURL + '/contest/register',
     submit: baseURL + '/contest/submit',

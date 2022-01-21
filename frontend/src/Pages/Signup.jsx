@@ -82,7 +82,7 @@ export default function Signup(props) {
     // preset data
     let header = {
         salutation: "Welcome",
-        title: "Register yourself"
+        title: "Register your team"
     },
     initialValues = {
         name: "",
@@ -99,13 +99,13 @@ export default function Signup(props) {
     inputFields = [
         {
             name: "name",
-            label: "Name",
+            label: "Team Name",
             type: "text",
-            placeholder: "John Doe"
+            placeholder: "John Doe's Team"
         },
         {
             name: "regNo",
-            label: "Registration No",
+            label: "Leader's Registration No",
             type: "text",
             placeholder: "9 digit number"
         },

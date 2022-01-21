@@ -2,6 +2,11 @@ import ieeeLogo from "./../Assets/svg/ieee_logo.svg"
 import accountLogo from "./../Assets/svg/account_logo.svg";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import axios from "./../Utils/axios_setup"
+import backend_settings from "../backend_settings";
+import services from "../Utils/services";
 
 function ListItem(props) {
     let {redirect, className, value} = props;
@@ -17,10 +22,33 @@ export default function Navbar(props) {
     let {links} = props;
     let navigate = useNavigate();
 
-    let loginPath = "/login";
-    
+    let [userData, setUserData] = useState(null);
+
+    useEffect(async () => {
+        try {
+            let responseData = await axios.get(backend_settings.accountDetails, services.auth.getNoCacheCredentialHeaders());
+
+            if(responseData.data.complete) {
+                // console.log(responseData.data)
+                setUserData(responseData.data.data.account);
+            } else {
+                console.log("User not logged in");
+                setUserData(null);
+            }
+        } catch(err){
+            if(err.response) {
+                console.error("ERROR: ")
+                console.error(err.response.message);
+            } else {
+                console.error("Fatal Error: Failed to fetch user details");
+                // Failed to connect to server.
+            }
+            setUserData(null);
+        }
+    }, [])
+
     const isSignedIn = () =>{
-        let token = localStorage.getItem("token");
+        let token = localStorage.getItem(process.env.REACT_APP_USER_TOKEN);
         if(token) return true;
         return false;
     }
@@ -28,10 +56,7 @@ export default function Navbar(props) {
     const buttonClick = () => {
         navigate("/login");
     }
-
-    const clickHandler = () => {
-        navigate()
-    }
+    console.log(userData)
 
     return (
         <div className=" sticky top-0 flex h-20 mx-0 md:mx-8 py-4 w-auto border-white/10 border-b-4 border-solid z-50 bg-transparent backdrop-blur-lg drop-shadow-2xl">
@@ -49,19 +74,18 @@ export default function Navbar(props) {
 
                 <ul className="hidden md:flex md:flex-start mx-8">
                     { links.map((elem) => {
-                        // return <li redirect={redirect} className="w-fit mx-4 my-auto text-white transition duration-300 hover:text-[#667EEA]"> {elem.heading} </li>
                         return <ListItem redirect={elem.redirect} className="w-fit mx-4 my-auto text-white transition duration-300 hover:text-[#667EEA]" value={elem.heading}/>
                     })}
                 </ul>
 
                 
             {/* Account */}
-            {isSignedIn() ? ( 
+            { userData && isSignedIn() ? ( 
                 <div className="grid grid-cols-3 my-auto mx-12">
                     <div className="p-4 h-auto rounded-full bg-[#181823]/40 justify-center align-center" >
                         <img className="text-right" src={accountLogo} className="mx-auto my-auto w-full h-full"></img>
                     </div>
-                    <span className="col-span-2 text-white/70 my-auto ml-2"> Account </span> 
+                    <span className="col-span-2 text-white/70 my-auto ml-2"> {userData.name} </span> 
                 </div>
             ) 
                 :
