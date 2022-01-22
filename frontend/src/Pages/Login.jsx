@@ -9,6 +9,7 @@ import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
 import {ReactComponent as LoginLoader} from "./../Assets/svg/loginLoad.svg"
 import * as successAnimationData from "./../Assets/animations/successAnimation.json"
 import * as alertAnimation from "./../Assets/animations/alertAnimation.json"
+import * as loginAnimation from "./../Assets/animations/loginAnimation.json"
 
 //Components
 import FormCard from "../Components/FormCard";
@@ -103,8 +104,22 @@ export default function Login(props) {
     return (
         <div>
         <div className="grid grid-cols-1 md:grid-cols-2 h-screen justify-end">
-            <div className="hidden md:flex h-0">
+            <div className="w-full h-full hidden md:flex flex-col justify-center items-center bg-login-gradient">
                 { // Design to be determined.
+                    <Lottie
+                        options={{
+                            loop: true,
+                            autoplay: false,
+                            animationData: loginAnimation,
+                            renderSettings: {
+                                preserveAspectRatio: "xMidyMid slice"
+                            }
+                        }} 
+                        width={500}
+                        height={500}
+                        isStopped={false}
+                        isClickToPauseDisabled={true}
+                    />
                 }
             </div>
 
@@ -141,7 +156,7 @@ export default function Login(props) {
                     [<button 
                         name="signup" 
                         onClick={navigateSignup} 
-                        className="w-8/12 h-10 justify-center rounded-lg bg-transparent text-white hover:text-white hover:border-white hover:border-2 transition-all duration-300 ease-in-out">
+                        className="w-full h-12 justify-center rounded-lg bg-transparent text-white hover:text-white hover:border-white border-2 border-white/20 transition-all duration-300 ease-in-out">
                              Signup
                     </button>
                 ]

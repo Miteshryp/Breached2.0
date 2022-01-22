@@ -67,7 +67,7 @@ export default function QuestionScreen() {
         <div>
         
         {/* Background */}
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-600 -z-50">
+        <div className="fixed top-0 left-0 w-full h-full bg-dashboard -z-50">
         </div>
 
         {/* Question Card */}

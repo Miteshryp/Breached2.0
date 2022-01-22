@@ -71,12 +71,16 @@ export default function TestPage() {
         }
       }, []);
   
+          // return (
+          //   <>
+          //     <h1 ref={measuredRef}>Hello, world</h1>
+          //     <h2>The above header is {Math.round(height)}px wide</h2>
+          //   </>
+          // );
+
           return (
-            <>
-              <h1 ref={measuredRef}>Hello, world</h1>
-              <h2>The above header is {Math.round(height)}px wide</h2>
-            </>
-          );
+            <MyPopover />
+          )
         
 
         // return (

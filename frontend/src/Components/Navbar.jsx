@@ -1,12 +1,19 @@
-import ieeeLogo from "./../Assets/svg/ieee_logo.svg"
-import accountLogo from "./../Assets/svg/account_logo.svg";
+
+// Library
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+
+// metadata
 import axios from "./../Utils/axios_setup"
 import backend_settings from "../backend_settings";
 import services from "../Utils/services";
+
+// Assets
+import ieeeLogo from "./../Assets/svg/ieee_logo.svg"
+import accountLogo from "./../Assets/svg/account_logo.svg";
+import AccountRedirect from "./AccountRedirect";
 
 function ListItem(props) {
     let {redirect, className, value} = props;
@@ -23,6 +30,7 @@ export default function Navbar(props) {
     let navigate = useNavigate();
 
     let [userData, setUserData] = useState(null);
+    let [update, forceUpdate] = useState(0);
 
     useEffect(async () => {
         try {
@@ -59,7 +67,7 @@ export default function Navbar(props) {
     console.log(userData)
 
     return (
-        <div className=" sticky top-0 flex h-20 mx-0 md:mx-8 py-4 w-auto border-white/10 border-b-4 border-solid z-50 bg-transparent backdrop-blur-lg drop-shadow-2xl">
+        <div className=" sticky top-0 flex h-20 mx-0 py-4 w-auto border-white/10 border-b-4 border-solid z-50 bg-transparent backdrop-blur-lg drop-shadow-2xl">
             
             
             {/* logo */}
@@ -81,11 +89,15 @@ export default function Navbar(props) {
                 
             {/* Account */}
             { userData && isSignedIn() ? ( 
-                <div className="grid grid-cols-3 my-auto mx-12">
-                    <div className="p-4 h-auto rounded-full bg-[#181823]/40 justify-center align-center" >
-                        <img className="text-right" src={accountLogo} className="mx-auto my-auto w-full h-full"></img>
-                    </div>
-                    <span className="col-span-2 text-white/70 my-auto ml-2"> {userData.name} </span> 
+                // <AccountRedirect />
+                <div className="grid grid-cols-1 my-auto mx-12 justify-items-end">
+                    {/* <div className="p-4 w-12 h-auto rounded-full bg-[#181823]/40 flex flex-row justify-end items-end" >
+                        <img src={accountLogo} className=""></img>
+                    </div> */}
+                    <AccountRedirect forceUpdate={() => {
+                        forceUpdate(prev => ++prev);
+                    }} name={userData.name} />
+                    {/* <span className="col-span-2 text-white/70 my-auto ml-2"> {userData.name} </span>  */}
                 </div>
             ) 
                 :

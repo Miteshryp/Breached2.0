@@ -13,6 +13,7 @@ import backend from "../../backend_settings";
 import {ReactComponent as FailLogo} from "./../../Assets/svg/failFaceLogo.svg"
 import {ReactComponent as LoginLoader} from "./../../Assets/svg/loginLoad.svg"
 import * as successAnimationData from "./../../Assets/animations/successAnimation.json"
+import services from "../../Utils/services";
 
 function ContestCard(props) {
     let {contest, registerSignal, failSignal, successSignal} = props;
@@ -57,18 +58,19 @@ function ContestCard(props) {
     let startDate = new Date(contest.startTime);
     let endDate = new Date(contest.endTime);
 
+    let backgroundColor = ' hover:bg-contest-card-hover bg-contest-card hover:shadow-2xl hover:shadow-white/20 backdrop-blur-3xl ' // bg-gradient-to-b from-[#009ffd] via-[#1b64b7] to-[#2288fd]';
     // from-[#009ffd] via-[#1b64b7] to-[#2288fd]
     return (
-    <div className="group w-full h-full px-10 p-5 bg-size-200 bg-pos-0 hover:bg-pos-100 bg-gradient-to-b from-[#009ffd] via-[#1b64b7] to-[#2288fd] transition-all rounded-xl shadow-2xl shadow-[#009ffd]/25 hover:scale-110">
-        <h1 className="text-white text-xl font-roboto font-bold transition-all"> {contest.name} </h1>
+    <div className={`group w-full h-full px-10 p-5 bg-size-200 bg-pos-0 hover:bg-pos-100 ${backgroundColor}  transition-all rounded-xl`}>
+        <h1 className="text-white text-xl font-inter font-extrabold transition-all"> {contest.name} </h1>
         <div className="my-4">
-        <p className="text-white"> No of Questions: {contest.question.length}</p>
-            <p className="text-white"> Starts at: {`${startDate.toDateString()} - ${startDate.toLocaleTimeString()}`}</p>
-            <p className="text-white"> Ends at: {`${endDate.toDateString()} - ${endDate.toLocaleTimeString()}`} </p>
+        <p className="text-white font-inter font-bold"> Questions: <span className="pl-2 font-light"> {contest.question.length}</span></p>
+            <p className="text-white font-inter font-bold">  Starts at: <span className="pl-2 font-light"> {`${startDate.toDateString()} - ${startDate.toLocaleTimeString()}`} </span> </p>
+            <p className="text-white font-inter font-bold">  Ends at: <span className="pl-2 font-light"> {`${endDate.toDateString()} - ${endDate.toLocaleTimeString()}`} </span> </p>
         </div>
 
-        <div className="flex justify-center items-center">
-            <button className="mx-auto px-4 py-2 hover:bg-white rounded hover:text-black border-2 border-white text-white transition-all bg-transparent" 
+        <div className="flex justify-left">
+            <button className="w-[60%] px-4 py-2 hover:bg-white rounded hover:text-black border-2 border-white text-white transition-all bg-transparent" 
                     onClick={registerContest}>
                 Register
             </button>
@@ -84,6 +86,7 @@ export default function ContestScreen(props) {
     let [registering, setRegistering] = useState(false);
     let [failShow, setFailShow] = useState({message: '', status: false});
     let [contestList, setContestList] = useState();
+    let [description, setDescription] = useState();
     let [fetching, setFetching] = useState(false);
     let [success, setSuccess] = useState(false);
     let [refresh, setRefresh] = useState(0);
@@ -102,8 +105,6 @@ export default function ContestScreen(props) {
                 }
             });
 
-            console.log(response);
-
             if(response.data.complete) {
                 // console.log(response.data.data.contestList);
                 setContestList(response.data.data.contestList);
@@ -111,6 +112,17 @@ export default function ContestScreen(props) {
                 
             } else {
                 setContestList(null);
+                setFailShow({ status: true, message: response.data.message })
+            }
+
+            let descriptionResponse = await axios.get(backend.getContestDescription, services.auth.getNoCacheCredentialHeaders());
+            if(descriptionResponse.data.complete) {
+                console.log(descriptionResponse.data.data.description);
+                // console.log(response.data);
+                setDescription(descriptionResponse.data.data.description);
+                setFailShow({status: false, message: "" });
+                
+            } else {
                 setFailShow({ status: true, message: response.data.message })
             }
 
@@ -179,10 +191,27 @@ export default function ContestScreen(props) {
         {/* Main Display Contest page */}
         { showContest ? (
         <div className="w-full h-full p-10">
+            
+            <div className="mb-40 w-full h-fit m-10 px-10 flex flex-col justify-start items-start">
+                <h1 className="text-white text-6xl font-roboto font-bold">
+                    Prologue
+                </h1>
 
+                <div className="mt-10 flex flex-col gap-5">
+                    { description && description.map((element) => {
+                        return( 
+                        <p className=" text-white text-2xl font-roboto font-light">
+                            {element.dashboardDescription}
+                        </p>
+                        )
+                    })
+                        
+                    }
+                </div>
+            </div>   
 
             <div className="w-full h-fit m-10 px-10 flex justify-start items-center">
-                <h1 className="text-white text-6xl font-roboto font-medium"> Available Contests </h1>
+                <h1 className="text-white text-6xl font-roboto font-bold"> Contests </h1>
             </div>
 
             <div className="w-full h-full px-20 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">

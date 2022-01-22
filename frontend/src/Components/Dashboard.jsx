@@ -1,16 +1,24 @@
 import {Tab} from "@headlessui/react"
+import { useNavigate } from "react-router";
 
 export default function MyPopover(props) {
 
     // screens: [{screenComponent, iconComponent}]
-    let {screens, HomeLogo, bgColor,highlightColor} = props;
-  
+    let {screens, HomeLogo, bgColor,highlightColor, homeRedirect} = props;
+    let navigate = useNavigate();
+    
     return (
       <div className="md:h-screen flex flex-col md:flex-row w-screen justify-start">
       <Tab.Group manual>
         <div className={`w-screen fixed top-0 left-0 z-50 h-24 md:h-full md:w-20 pt-2 pb-0 md:py-4 flex flex-col md:flex-row justify-end ${bgColor}`}>
           <Tab.List className="w-full h-full flex-grow flex flex-row justify-center md:justify-start md:flex-col gap-3">
-            <div className={"w-full px-4 md:w-auto my-auto md:my-0 stroke-gray-900 md:mb-10"} > <HomeLogo className="w-full"/></div>
+            <div
+              onClick={() => {
+                navigate(homeRedirect)
+              }} 
+              className={"w-full px-4 md:w-auto my-auto md:my-0 stroke-gray-900 md:mb-10"} >
+                 <HomeLogo className="w-full"/>
+            </div>
             {
               screens.map((element) => {
                 let Icon = element.iconComponent;

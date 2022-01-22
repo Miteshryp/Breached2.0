@@ -119,6 +119,7 @@ async function generateOverallLeaderboard() {
 
 
    rankList.sort((c1, c2) => {
+      if(c1.score === 0 && c2.score === 0) return -1;
       if(c1.score > c2.score) return -1
       else if(c2.score > c1.score) return 1;
       else {

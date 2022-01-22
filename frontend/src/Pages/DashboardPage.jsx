@@ -56,7 +56,7 @@ export default function DashboardPage() {
     return (
         <div>
             <div className={`${authenticated ? 'flex' : 'hidden'}`} >
-                <Dashboard screens={screens} HomeLogo={IeeeLogo} bgColor={"bg-sidebar"}  highlightColor={"bg-sidebar-highlight"}/>
+                <Dashboard screens={screens} HomeLogo={IeeeLogo} homeRedirect={"/"} bgColor={"bg-sidebar"}  highlightColor={"bg-sidebar-highlight"}/>
             </div>
             <div className={``}>
 

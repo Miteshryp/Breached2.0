@@ -1,276 +1,352 @@
-// import { useState } from 'react'
-// import { Tab } from '@headlessui/react'
 
-// function classNames(...classes) {
-//   return classes.filter(Boolean).join(' ')
-// }
+import { Menu, Transition } from '@headlessui/react'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 
-// export default function MyPopover() {
-//   let [categories] = useState({
-//     Recent: [
-//       {
-//         id: 1,
-//         title: 'Does drinking coffee make you smarter?',
-//         date: '5h ago',
-//         commentCount: 5,
-//         shareCount: 2,
-//       },
-//       {
-//         id: 2,
-//         title: "So you've bought coffee... now what?",
-//         date: '2h ago',
-//         commentCount: 3,
-//         shareCount: 2,
-//       },
-//     ],
-//     Popular: [
-//       {
-//         id: 1,
-//         title: 'Is tech making coffee better or worse?',
-//         date: 'Jan 7',
-//         commentCount: 29,
-//         shareCount: 16,
-//       },
-//       {
-//         id: 2,
-//         title: 'The most innovative things happening in coffee',
-//         date: 'Mar 19',
-//         commentCount: 24,
-//         shareCount: 12,
-//       },
-//     ],
-//     Trending: [
-//       {
-//         id: 1,
-//         title: 'Ask Me Anything: 10 answers to your questions about coffee',
-//         date: '2d ago',
-//         commentCount: 9,
-//         shareCount: 5,
-//       },
-//       {
-//         id: 2,
-//         title: "The worst advice we've ever heard about coffee",
-//         date: '4d ago',
-//         commentCount: 1,
-//         shareCount: 2,
-//       },
-//     ],
-//   })
-
-//   return (
-//     <div className="w-full max-w-md px-2 py-16 sm:px-0">
-//       <Tab.Group>
-//         <Tab.List className="flex p-1 space-x-1 bg-blue-900/20 rounded-xl">
-//           {Object.keys(categories).map((category) => (
-//             <Tab
-//               key={category}
-//               className={({ selected }) =>
-//                 classNames(
-//                   'w-full py-2.5 text-sm leading-5 font-medium text-blue-700 rounded-lg',
-//                   'focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60',
-//                   selected
-//                     ? 'bg-white shadow'
-//                     : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
-//                 )
-//               }
-//             >
-//               {category}
-//             </Tab>
-//           ))}
-//         </Tab.List>
-//         <Tab.Panels className="mt-2">
-//           {Object.values(categories).map((posts, idx) => (
-//             <Tab.Panel
-//               key={idx}
-//               className={classNames(
-//                 'bg-white rounded-xl p-3',
-//                 'focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60'
-//               )}
-//             >
-//               <ul>
-//                 {posts.map((post) => (
-//                   <li
-//                     key={post.id}
-//                     className="relative p-3 rounded-md hover:bg-coolGray-100"
-//                   >
-//                     <h3 className="text-sm font-medium leading-5">
-//                       {post.title}
-//                     </h3>
-
-//                     <ul className="flex mt-1 space-x-1 text-xs font-normal leading-4 text-coolGray-500">
-//                       <li>{post.date}</li>
-//                       <li>&middot;</li>
-//                       <li>{post.commentCount} comments</li>
-//                       <li>&middot;</li>
-//                       <li>{post.shareCount} shares</li>
-//                     </ul>
-
-//                     <a
-//                       href="#"
-//                       className={classNames(
-//                         'absolute inset-0 rounded-md',
-//                         'focus:z-10 focus:outline-none focus:ring-2 ring-blue-400'
-//                       )}
-//                     />
-//                   </li>
-//                 ))}
-//               </ul>
-//             </Tab.Panel>
-//           ))}
-//         </Tab.Panels>
-//       </Tab.Group>
-//     </div>
-//   )
-// }
-
-
-
-
-
-
-import { Transition, Popover, Tab } from "@headlessui/react"
-import {ChartBarIcon, ChevronDownIcon, DocumentIcon, HomeIcon} from "@heroicons/react/solid"
-import {ReactComponent as IeeeLogo} from "./../Assets/svg/ieee_logo.svg"
-import { Fragment } from "react"
-
-
-const solutions = [
-  {
-    name: 'Insights',
-    description: 'Measure actions your users take',
-    href: '##',
-    icon: IconOne,
-  },
-  {
-    name: 'Automations',
-    description: 'Create your own targeted content',
-    href: '##',
-    icon: IconTwo,
-  },
-  {
-    name: 'Reports',
-    description: 'Keep track of your growth',
-    href: '##',
-    icon: IconThree,
-  },
-]
 
 export default function MyPopover(props) {
 
   // screens: [{screenComponent, iconComponent}]
-  let {screens, HomeLogo} = props;
+  // let {screens, HomeLogo} = props;
 
   return (
-    <div className="flex flex-col md:flex-row w-screen justify-start">
-    <Tab.Group manual>
-      <div className="w-screen h-24 md:h-screen md:w-20 pt-2 pb-0 md:py-4 flex flex-col md:flex-row justify-end bg-[#120F05]">
-        <Tab.List className="w-full h-full flex-grow flex flex-row justify-center md:justify-start md:flex-col gap-0">
-          <div className={"w-[100%] px-4 md:w-auto my-auto md:my-0 md:mb-10"} > <HomeLogo className="w-full"/></div>
-          {
-            screens.map((element) => {
-              let Icon = element.iconComponent;
-              return <Tab className={({selected}) => (`group w-full md:h-[12%] md:w-auto mx-0 mb-[1%] mt-[1%] md:ml-3 md:mr-0 md:my-0 pl-0 px-4 py-7 text-white rounded-md md:rounded-r-none md:rounded-l-md ${selected ? 'hover:bg-sky-400' : 'hover:bg-white'}  ${selected ? 'bg-sky-400' : ''} transition-all ease-in-out duration-300`)} ><Icon     className="w-full h-full group-hover:text-black transition-all ease-in-out duration-300"/></Tab>
-            })
-          }
-          {/* <Tab className={({selected}) => (`group w-full md:h-[12%] md:w-auto mx-0 mb-[1%] mt-[1%] md:ml-3 md:mr-0 md:my-0 pl-0 px-4 py-7 text-white rounded-md md:rounded-r-none md:rounded-l-md ${selected ? 'hover:bg-sky-400' : 'hover:bg-white'}  ${selected ? 'bg-sky-400' : ''} transition-all ease-in-out duration-300`)} ><HomeIcon     className="w-full h-full group-hover:text-black transition-all ease-in-out duration-300"/></Tab>
-          <Tab className={({selected}) => (`group w-full md:h-[12%] md:w-auto mx-0 mb-[1%] mt-[1%] md:ml-3 md:mr-0 md:my-0 pl-0 px-4 py-7 text-white rounded-md md:rounded-r-none md:rounded-l-md ${selected ? 'hover:bg-sky-400' : 'hover:bg-white'}  ${selected ? 'bg-sky-400' : ''} transition-all ease-in-out duration-300`)} ><ChartBarIcon className="w-full h-full group-hover:text-black transition-all ease-in-out duration-300"/></Tab>
-          <Tab className={({selected}) => (`group w-full md:h-[12%] md:w-auto mx-0 mb-[1%] mt-[1%] md:ml-3 md:mr-0 md:my-0 pl-0 px-4 py-7 text-white rounded-md md:rounded-r-none md:rounded-l-md ${selected ? 'hover:bg-sky-400' : 'hover:bg-white'}  ${selected ? 'bg-sky-400' : ''} transition-all ease-in-out duration-300`)} ><DocumentIcon className="w-full h-full group-hover:text-black transition-all ease-in-out duration-300"/></Tab> */}
-        </Tab.List>
-      </div>
-    
-      <Tab.Panels className={"w-full"}>
-        {
-          screens.map((element) => {
-            let Screen = element.screenComponent;
-            return (
-            <Tab.Panel className="relative w-full self-stretch">
-              <Screen />
-            </Tab.Panel>
-            )
-          })
-        }
-        {/* <Tab.Panel className="w-full self-stretch">Content 1</Tab.Panel>
-        <Tab.Panel className="w-full self-stretch">Content 2</Tab.Panel>
-        <Tab.Panel className="w-full self-stretch">Content 3</Tab.Panel> */}
-      </Tab.Panels>
-    </Tab.Group>
+    <div className="w-40 text-right fixed top-16">
+      <Menu as="div" className="relative inline-block text-left">
+        <div>
+          <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+            Options
+            <ChevronDownIcon
+              className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
+              aria-hidden="true"
+            />
+          </Menu.Button>
+        </div>
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <Menu.Items className="absolute right-0 w-32 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div className="px-1 py-1 ">
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`${
+                      active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      <EditActiveIcon
+                        className="w-5 h-5 mr-2"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <EditInactiveIcon
+                        className="w-5 h-5 mr-2"
+                        aria-hidden="true"
+                      />
+                    )}
+                    Edit
+                  </button>
+                )}
+              </Menu.Item>
+              <Menu.Item>
+                {({ active }) => (
+                  <button
+                    className={`${
+                      active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                  >
+                    {active ? (
+                      <DuplicateActiveIcon
+                        className="w-5 h-5 mr-2"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <DuplicateInactiveIcon
+                        className="w-5 h-5 mr-2"
+                        aria-hidden="true"
+                      />
+                    )}
+                    Duplicate
+                  </button>
+                )}
+              </Menu.Item>
+            </div>
+            
+          </Menu.Items>
+        </Transition>
+      </Menu>
     </div>
   )
 
-    // return (
-    //     <div className="w-full max-w-sm px-4 fixed top-16">
-    //     <Popover className="relative">
-    //       {({ open }) => (
-    //         <>
-    //           <Popover.Button
-    //             className={`
-    //               ${open ? '' : 'text-opacity-90'}
-    //               text-white group bg-orange-700 px-3 py-2 rounded-md inline-flex items-center text-base font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
-    //           >
-    //             <span>Solutions</span>
-    //             <ChevronDownIcon
-    //               className={`${open ? '' : 'text-opacity-70'}
-    //                 ml-2 h-5 w-5 text-orange-300 group-hover:text-opacity-80 transition ease-in-out duration-150`}
-    //               aria-hidden="true"
-    //             />
-    //           </Popover.Button>
-    //           <Transition
-    //             as={Fragment}
-    //             enter="transition ease-out duration-200"
-    //             enterFrom="opacity-0 translate-y-1"
-    //             enterTo="opacity-100 translate-y-0"
-    //             leave="transition ease-in duration-150"
-    //             leaveFrom="opacity-100 translate-y-0"
-    //             leaveTo="opacity-0 translate-y-1"
-    //           >
-    //             <Popover.Panel className="absolute z-10 w-screen max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
-    //               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-    //                 <div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
-    //                   {solutions.map((item) => (
-    //                     <a
-    //                       key={item.name}
-    //                       href={item.href}
-    //                       className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-    //                     >
-    //                       <div className="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white sm:h-12 sm:w-12">
-    //                         <item.icon aria-hidden="true" />
-    //                       </div>
-    //                       <div className="ml-4">
-    //                         <p className="text-sm font-medium text-gray-900">
-    //                           {item.name}
-    //                         </p>
-    //                         <p className="text-sm text-gray-500">
-    //                           {item.description}
-    //                         </p>
-    //                       </div>
-    //                     </a>
-    //                   ))}
-    //                 </div>
-    //                 <div className="p-4 bg-gray-50">
-    //                   <a
-    //                     href="##"
-    //                     className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-    //                   >
-    //                     <span className="flex items-center">
-    //                       <span className="text-sm font-medium text-gray-900">
-    //                         Documentation
-    //                       </span>
-    //                     </span>
-    //                     <span className="block text-sm text-gray-500">
-    //                       Start integrating products and tools
-    //                     </span>
-    //                   </a>
-    //                 </div>
-    //               </div>
-    //             </Popover.Panel>
-    //           </Transition>
-    //         </>
-    //       )}
-    //     </Popover>
-    //   </div>
-    // )
+  // return (
+  //   <div className="flex flex-col md:flex-row w-screen justify-start">
+  //   <Tab.Group manual>
+  //     <div className="w-screen h-24 md:h-screen md:w-20 pt-2 pb-0 md:py-4 flex flex-col md:flex-row justify-end bg-[#120F05]">
+  //       <Tab.List className="w-full h-full flex-grow flex flex-row justify-center md:justify-start md:flex-col gap-0">
+  //         <div className={"w-[100%] px-4 md:w-auto my-auto md:my-0 md:mb-10"} > <HomeLogo className="w-full"/></div>
+  //         {
+  //           screens.map((element) => {
+  //             let Icon = element.iconComponent;
+  //             return <Tab className={({selected}) => (`group w-full md:h-[12%] md:w-auto mx-0 mb-[1%] mt-[1%] md:ml-3 md:mr-0 md:my-0 pl-0 px-4 py-7 text-white rounded-md md:rounded-r-none md:rounded-l-md ${selected ? 'hover:bg-sky-400' : 'hover:bg-white'}  ${selected ? 'bg-sky-400' : ''} transition-all ease-in-out duration-300`)} ><Icon     className="w-full h-full group-hover:text-black transition-all ease-in-out duration-300"/></Tab>
+  //           })
+  //         }
+  //         {/* <Tab className={({selected}) => (`group w-full md:h-[12%] md:w-auto mx-0 mb-[1%] mt-[1%] md:ml-3 md:mr-0 md:my-0 pl-0 px-4 py-7 text-white rounded-md md:rounded-r-none md:rounded-l-md ${selected ? 'hover:bg-sky-400' : 'hover:bg-white'}  ${selected ? 'bg-sky-400' : ''} transition-all ease-in-out duration-300`)} ><HomeIcon     className="w-full h-full group-hover:text-black transition-all ease-in-out duration-300"/></Tab>
+  //         <Tab className={({selected}) => (`group w-full md:h-[12%] md:w-auto mx-0 mb-[1%] mt-[1%] md:ml-3 md:mr-0 md:my-0 pl-0 px-4 py-7 text-white rounded-md md:rounded-r-none md:rounded-l-md ${selected ? 'hover:bg-sky-400' : 'hover:bg-white'}  ${selected ? 'bg-sky-400' : ''} transition-all ease-in-out duration-300`)} ><ChartBarIcon className="w-full h-full group-hover:text-black transition-all ease-in-out duration-300"/></Tab>
+  //         <Tab className={({selected}) => (`group w-full md:h-[12%] md:w-auto mx-0 mb-[1%] mt-[1%] md:ml-3 md:mr-0 md:my-0 pl-0 px-4 py-7 text-white rounded-md md:rounded-r-none md:rounded-l-md ${selected ? 'hover:bg-sky-400' : 'hover:bg-white'}  ${selected ? 'bg-sky-400' : ''} transition-all ease-in-out duration-300`)} ><DocumentIcon className="w-full h-full group-hover:text-black transition-all ease-in-out duration-300"/></Tab> */}
+  //       </Tab.List>
+  //     </div>
+    
+  //     <Tab.Panels className={"w-full"}>
+  //       {
+  //         screens.map((element) => {
+  //           let Screen = element.screenComponent;
+  //           return (
+  //           <Tab.Panel className="relative w-full self-stretch">
+  //             <Screen />
+  //           </Tab.Panel>
+  //           )
+  //         })
+  //       }
+  //       {/* <Tab.Panel className="w-full self-stretch">Content 1</Tab.Panel>
+  //       <Tab.Panel className="w-full self-stretch">Content 2</Tab.Panel>
+  //       <Tab.Panel className="w-full self-stretch">Content 3</Tab.Panel> */}
+  //     </Tab.Panels>
+  //   </Tab.Group>
+  //   </div>
+  // )
+
 }
 
+
+
+
+function EditInactiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4 13V16H7L16 7L13 4L4 13Z"
+        fill="#EDE9FE"
+        stroke="#A78BFA"
+        strokeWidth="2"
+      />
+    </svg>
+  )
+}
+
+function EditActiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4 13V16H7L16 7L13 4L4 13Z"
+        fill="#8B5CF6"
+        stroke="#C4B5FD"
+        strokeWidth="2"
+      />
+    </svg>
+  )
+}
+
+function DuplicateInactiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4 4H12V12H4V4Z"
+        fill="#EDE9FE"
+        stroke="#A78BFA"
+        strokeWidth="2"
+      />
+      <path
+        d="M8 8H16V16H8V8Z"
+        fill="#EDE9FE"
+        stroke="#A78BFA"
+        strokeWidth="2"
+      />
+    </svg>
+  )
+}
+
+function DuplicateActiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4 4H12V12H4V4Z"
+        fill="#8B5CF6"
+        stroke="#C4B5FD"
+        strokeWidth="2"
+      />
+      <path
+        d="M8 8H16V16H8V8Z"
+        fill="#8B5CF6"
+        stroke="#C4B5FD"
+        strokeWidth="2"
+      />
+    </svg>
+  )
+}
+
+function ArchiveInactiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="5"
+        y="8"
+        width="10"
+        height="8"
+        fill="#EDE9FE"
+        stroke="#A78BFA"
+        strokeWidth="2"
+      />
+      <rect
+        x="4"
+        y="4"
+        width="12"
+        height="4"
+        fill="#EDE9FE"
+        stroke="#A78BFA"
+        strokeWidth="2"
+      />
+      <path d="M8 12H12" stroke="#A78BFA" strokeWidth="2" />
+    </svg>
+  )
+}
+
+function ArchiveActiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="5"
+        y="8"
+        width="10"
+        height="8"
+        fill="#8B5CF6"
+        stroke="#C4B5FD"
+        strokeWidth="2"
+      />
+      <rect
+        x="4"
+        y="4"
+        width="12"
+        height="4"
+        fill="#8B5CF6"
+        stroke="#C4B5FD"
+        strokeWidth="2"
+      />
+      <path d="M8 12H12" stroke="#A78BFA" strokeWidth="2" />
+    </svg>
+  )
+}
+
+function MoveInactiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M10 4H16V10" stroke="#A78BFA" strokeWidth="2" />
+      <path d="M16 4L8 12" stroke="#A78BFA" strokeWidth="2" />
+      <path d="M8 6H4V16H14V12" stroke="#A78BFA" strokeWidth="2" />
+    </svg>
+  )
+}
+
+function MoveActiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M10 4H16V10" stroke="#C4B5FD" strokeWidth="2" />
+      <path d="M16 4L8 12" stroke="#C4B5FD" strokeWidth="2" />
+      <path d="M8 6H4V16H14V12" stroke="#C4B5FD" strokeWidth="2" />
+    </svg>
+  )
+}
+
+function DeleteInactiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="5"
+        y="6"
+        width="10"
+        height="10"
+        fill="#EDE9FE"
+        stroke="#A78BFA"
+        strokeWidth="2"
+      />
+      <path d="M3 6H17" stroke="#A78BFA" strokeWidth="2" />
+      <path d="M8 6V4H12V6" stroke="#A78BFA" strokeWidth="2" />
+    </svg>
+  )
+}
+
+function DeleteActiveIcon(props) {
+  return (
+    <svg
+      {...props}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="5"
+        y="6"
+        width="10"
+        height="10"
+        fill="#8B5CF6"
+        stroke="#C4B5FD"
+        strokeWidth="2"
+      />
+      <path d="M3 6H17" stroke="#C4B5FD" strokeWidth="2" />
+      <path d="M8 6V4H12V6" stroke="#C4B5FD" strokeWidth="2" />
+    </svg>
+  )
+}
 
 function IconOne() {
   return (

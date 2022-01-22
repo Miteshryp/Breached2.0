@@ -144,11 +144,14 @@ export default function QuestionCard(props) {
             </div>
 
             <div className="w-full h-fit flex flex-col lg:flex-row justify-center items-center lg:justify-start lg:items-start">
-                <div  className="h-fit flex flex-col justify-center items-center lg:flex-row lg:justify-start lg:items-start">
-                    <input className="w-full lg:w-80 h-14  lg:h-14 p-2 mx-6 lg:my-0 rounded text-center text-3xl font-inter font-bold" type="text" value={answer.current} onChange={handleAnswerChange} />
-                    <button onClick={() => {
+                <div  >
+                    <form className="h-fit flex flex-col justify-center items-center lg:flex-row lg:justify-start lg:items-start" onSubmit={(e) => {
+                        e.preventDefault();
                         submitAnswer();
-                    }} className="w-full lg:w-40 h-full        p-4 my-4 lg:my-0 rounded text-center text-md font-roboto font-medium bg-sky-400  transition-all ease-in-out hover:scale-110 hover:text-white " type="button" > Submit </button>
+                    }}>
+                        <input className="w-full lg:w-80 h-14  lg:h-14 m-2 p-2 lg:my-0 rounded text-center text-3xl font-inter font-bold" type="text" value={answer.current} onChange={handleAnswerChange} />
+                        <input className="w-full lg:w-40 h-14          m-2 p-2 lg:my-0 rounded text-center text-md text-white font-roboto font-medium bg-[#1088FF] transition-all ease-in-out hover:text-[#1088FF] hover:border-2 hover:border-[#1088FF] hover:bg-transparent" type="submit" value="Submit" />
+                    </form>
                     
                 </div>
             </div>

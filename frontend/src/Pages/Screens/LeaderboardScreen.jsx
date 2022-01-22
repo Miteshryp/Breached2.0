@@ -50,13 +50,13 @@ export default function LeaderboardScreen(props) {
             <div className="fixed w-screen h-screen top-0 left-0 bg-dashboard -z-10"></div>
             {( responseData &&
             <div className={`p-10 flex flex-col justify-center items-center`}>
-                <h1 className="text-white text-5xl font-inter font-medium">Leaderboard</h1>
+                <h1 className="text-white text-6xl font-inter font-bold">Leaderboard</h1>
                 <div className="w-full h-full mt-20 px-5 flex flex-col">
-                    <h1 className="text-white text-3xl font-inter font-normal justify-self-end"> Your rank: {responseData.rank}</h1>
+                    <h1 className="text-white text-3xl font-inter font-normal justify-self-end"> Your rank: {responseData.rank > 0 ? responseData.rank : "-"}</h1>
                 </div>
                 <div className="w-full h-full flex my-5 justify-center items-center scrollbar-none">
                     <table className="w-full table-fixed">
-                        <thead className="bg-sky-400">
+                        <thead className="bg-contest-card-hover">
                             <td className="pr-20       py-7 text-white text-xl font-inter font-bold justify-center rounded-tl-xl pl-4">Rank</td>
                             <td className="pl-4  pr-10 py-7 text-white text-xl font-inter font-bold justify-center">Team Name</td>
                             <td className="pl-4  pr-10 py-7 text-white text-xl font-inter font-bold justify-center">Registration No.</td>

@@ -21,7 +21,7 @@ export default function FormCard(props) {
    let {header, initialValues, validationSchema, onSubmit, inputFields, extraComponents, submitData, background, rememberMe} = props;
 
    return (
-   <div className={`p-10 flex justify-center items-center ${background ? background : formDefaultBackgroundColor} rounded-lg`}>
+   <div className={`p-10 flex justify-center items-center ${background ? background : formDefaultBackgroundColor}`}>
       <div className="flex flex-col gap-10 mx-auto my-auto w-auto px-20">
           <div className="w-full justify-items-start" >
               <p className="flex-1 text-white text-sm font-roboto font-medium"> {header.salutation} </p>
@@ -70,11 +70,12 @@ export default function FormCard(props) {
                       </div>
                       )}
 
-                      <div className="w-full flex flex-col gap-3 items-center">
+                      <div className="w-full flex flex-row gap-3 items-center">
                           <button 
                            name={submitData.name}
                            type="submit"   
-                           className="w-8/12 h-10 justify-center rounded-lg bg-[#5264B5] hover:scale-110 hover:bg-white hover:text-gray-700 transition duration-300 ease-in-out" > {submitData.value} </button>
+                        //    bg-[#5264B5]
+                           className="w-full h-12 justify-center rounded-lg text-white bg-contest-card-hover hover:bg-white hover:text-gray-700 transition duration-300 ease-in-out" > {submitData.value} </button>
                            {extraComponents()}
                           {/* <button name="signup" onClick={navigateSignup} className="w-8/12 h-10 justify-center rounded-lg bg-transparent text-white hover:text-white hover:border-white hover:border-2 transition-all duration-300 ease-in-out" > Signup</button> */}
                       </div>

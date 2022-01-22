@@ -10,5 +10,6 @@ export default {
     register: baseURL + '/contest/register',
     submit: baseURL + '/contest/submit',
     getCurrentQuestion: baseURL + '/contest/getCurrentQuestion',
-    getOverallLeaderboard: baseURL + '/contest/getOverallLeaderboard'
+    getOverallLeaderboard: baseURL + '/contest/getOverallLeaderboard',
+    getContestDescription: baseURL + '/meta/getContestDescription'
 };

@@ -40,7 +40,7 @@ initDatabase();
 // routers
 app.use("/contest", require("./routes/contest"));
 app.use("/user", require("./routes/user"));
-
+app.use("/meta", require("./routes/metadata"));
 
 app.listen(serverSettings.port, async () => {
    logger.info("Server listening on port: " + serverSettings.port);
