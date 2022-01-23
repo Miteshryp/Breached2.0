@@ -38,7 +38,7 @@ export default function ContestScreen(props) {
                     'Cache-Control': 'no-cache',
                     'Pragma': 'no-cache',
                     'Expires': '0',
-                    'x-access-token': localStorage.getItem("token")
+                    'x-access-token': localStorage.getItem(process.env.REACT_APP_USER_TOKEN)
                 }
             });
 

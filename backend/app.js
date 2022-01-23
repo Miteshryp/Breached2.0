@@ -34,7 +34,11 @@ app.use(express.urlencoded({extended: true}));
 
 // Database initiation.
 const dburl = process.env.DB_URI;
-let initDatabase = async () => { await mongoose.connect(dburl) };
+let initDatabase = async () => {
+   logger.warn("Connecting to Database: " + dburl);
+   await mongoose.connect(dburl);
+   logger.info("Connected to database successfully.");
+};
 initDatabase();
 
 // routers
@@ -43,5 +47,6 @@ app.use("/user", require("./routes/user"));
 app.use("/meta", require("./routes/metadata"));
 
 app.listen(serverSettings.port, async () => {
+   logger.info("Server host: " + serverSettings.host);
    logger.info("Server listening on port: " + serverSettings.port);
 });

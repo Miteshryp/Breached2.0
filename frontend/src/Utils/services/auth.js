@@ -9,7 +9,7 @@ async function login (credentials) {
       return false;
    }
 
-   localStorage.setItem("token", response.token);
+   localStorage.setItem(process.env.REACT_APP_USER_TOKEN, response.token);
    return true;
 }
 
@@ -20,7 +20,7 @@ async function signup (credentials) {
       return false;
    }
 
-   localStorage.setItem("token", response.token);
+   localStorage.setItem(process.env.REACT_APP_USER_TOKEN, response.token);
    return true; //{...response, token: null};
 }
 
@@ -28,7 +28,7 @@ async function logout () {
    // one way to do it
    // let response = await axios.post(settings.baseURL + settings.logout);
    // localStorage.setItem("token", response.token);
-   localStorage.setItem("token", null);
+   localStorage.setItem(process.env.REACT_APP_USER_TOKEN, null);
 }
 
 function getCredentialHeaders() {
@@ -46,7 +46,7 @@ function getNoCacheCredentialHeaders() {
          'Cache-Control': 'no-cache',
          'Pragma': 'no-cache',
          'Expires': '0',
-         "x-access-token": localStorage.getItem("token")
+         "x-access-token": localStorage.getItem(process.env.REACT_APP_USER_TOKEN)
       }
    }
 }

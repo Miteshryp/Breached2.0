@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "start": "NODE_ENV=production node app.js",
@@ -20,5 +19,15 @@
     "node-color-log": "^7.0.0",
     "uuid": "^8.3.2",
     "yup": "^0.32.11"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Miteshryp/breached-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Miteshryp/breached-backend/issues"
+  },
+  "homepage": "https://github.com/Miteshryp/breached-backend#readme",
+  "description": ""
 }

@@ -1,4 +1,4 @@
-const baseURL ="http://localhost:8000";// process.env.REACT_APP_BACKEND_URL;
+const baseURL = process.env.REACT_APP_BACKEND_URL;
 console.log(baseURL);
 export default {
     login: baseURL +  "/user/login",
