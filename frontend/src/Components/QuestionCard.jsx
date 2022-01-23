@@ -1,6 +1,6 @@
 // Library imports
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Document,Page,pdfjs } from "react-pdf";
+// import { Document,Page,pdfjs } from "react-pdf";
 import {IoIosDocument as DocumentIcon} from "react-icons/io"
 
 // import { pdfjs } from 'react-pdf';
@@ -12,9 +12,9 @@ import services from "../Utils/services";
 
 // Meta data
 import backend_settings from "../backend_settings";
-import PdfDocument from "./PdfDocument";
+// import PdfDocument from "./PdfDocument";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 export default function QuestionCard(props) {
     let {question, signalSubmit, signalSuccess, signalFail, signalWrongAnswer} = props;
