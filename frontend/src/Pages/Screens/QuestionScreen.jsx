@@ -85,9 +85,13 @@ export default function QuestionScreen() {
         {
             contestEnd && contestEnd.status && (
                 <div className="p-20 w-full h-full rounded-2xl bg-card">
-                    <h1 className="mb-10 mx-auto text-white text-6xl font-inter font-bold"> Day Ended. </h1>
+                    
                     {
-                        contestEnd.endCredit.map((element) => {
+                        contestEnd.endCredit.map((element, index) => {
+                            if(index === 0)
+                            return (
+                                <h1 className="mb-10 mx-auto text-white text-6xl font-inter font-bold"> {element} </h1>
+                            )
                             return (
                                 <p className="mb-7 text-white text-xl font-inter font-light">
                                     {element}

@@ -118,7 +118,7 @@ export default function QuestionCard(props) {
                                 if(element.contentType === "audio") {
                                     return (
                                     <audio controls>
-                                        <source src={element.url} />
+                                        <source src={element.url} type="audio/mpeg" />
                                     </audio>
                                     )
                                 } else if(element.contentType === "image") {
