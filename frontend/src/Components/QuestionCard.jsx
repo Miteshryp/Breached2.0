@@ -1,7 +1,7 @@
 // Library imports
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Document,Page,pdfjs } from "react-pdf";
-
+import {IoIosDocument as DocumentIcon} from "react-icons/io"
 
 // import { pdfjs } from 'react-pdf';
 // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -55,6 +55,7 @@ export default function QuestionCard(props) {
                 signalSuccess(true);
                 signalFail({ message: '', status: false});
                 signalWrongAnswer(false);
+                setAnswer("");
             } else {
                 console.log("Submission Failed");
                 signalSuccess(false);
@@ -86,6 +87,7 @@ export default function QuestionCard(props) {
     //         console.log("Tried to reset but parentRef is empty");
     //     }
     // }
+    
 
     return (
         <div className="w-full h-fit lg:h-full p-20  rounded-2xl bg-card">
@@ -94,16 +96,23 @@ export default function QuestionCard(props) {
                     <h1 className="text-white text-4xl font-medium font-roboto">{question.title ? question.title : "No Title"}</h1>
 
                     <div className="w-full h-fit lg:h-[80%] lg:overflow-y-auto scrollbar-none">
-                        <p className="text-white text-xl md:text-lg font-light font-roboto">
-                            {question.statement ? question.statement : "No statement"}
-                        </p>
+                        {
+                            question.statement.map((element) => {
+                                return (
+                                <p className="mb-3 text-white text-xl md:text-lg font-light font-roboto">
+                                    {/* {question.statement ? question.statement : "No statement"} */}
+                                    {element}
+                                </p>
+                                )
+                            })
+                        }  
                     </div>
                     
 
                 </div>
 
                 <div className="h-full w-full lg:w-4/12 flex flex-col justify-center items-center">
-                    <div className="h-fit w-fit flex flex-col mx-auto justify-center items-center">
+                    <div className="h-full w-full flex flex-col mx-auto justify-center items-center">
                         { question.clueMedia && (
                             question.clueMedia.map((element) => {
                                 if(element.contentType === "audio") {
@@ -114,7 +123,7 @@ export default function QuestionCard(props) {
                                     )
                                 } else if(element.contentType === "image") {
                                     return <img src={element.url} ></img>
-                                } else if(element.contentType === "pdf") {
+                                } else  {
                                     return (
                                     // <Document 
                                     //     className={"w-full"}
@@ -132,10 +141,17 @@ export default function QuestionCard(props) {
                                     //     }}>
                                     //     <Page pageNumber={page} width={pdfWidth - 300} height={pdfHeight - 200} />
                                     // </Document>
-                                    <PdfDocument url={element.url} parentReference={parentRef}></PdfDocument>
+                                    // <PdfDocument url={element.url} parentReference={parentRef}></PdfDocument>
+                                    <button
+                                        onClick={() => {
+                                            window.open(element.url);
+                                        }}
+                                        className="w-fit h-fit p-3 group flex flex-row justify-center items-center gap-3 hover:bg-emerald-500 bg-transparent outline-1 outline-double outline-emerald-500 backdrop-blur-3xl rounded transition-all ease-in-out duration-300">
+                                            <DocumentIcon className="w-auto h-full group-hover:fill-white fill-emerald-500" />
+                                            <p className="group-hover:text-white text-2xl font-light font-roboto text-emerald-500"> Open {element.contentType}</p>
+                                    </button>
                                     )
                                 }
-                                return <div></div>
                             })
                             )
                         }
@@ -143,14 +159,14 @@ export default function QuestionCard(props) {
                 </div>
             </div>
 
-            <div className="w-full h-fit flex flex-col lg:flex-row justify-center items-center lg:justify-start lg:items-start">
+            <div className="w-full h-fit flex flex-col lg:ml-10 lg:flex-row justify-center items-center lg:justify-start lg:items-start">
                 <div  >
                     <form className="h-fit flex flex-col justify-center items-center lg:flex-row lg:justify-start lg:items-start" onSubmit={(e) => {
                         e.preventDefault();
                         submitAnswer();
                     }}>
-                        <input className="w-full lg:w-80 h-14  lg:h-14 m-2 p-2 lg:my-0 rounded text-center text-3xl font-inter font-bold" type="text" value={answer.current} onChange={handleAnswerChange} />
-                        <input className="w-full lg:w-40 h-14          m-2 p-2 lg:my-0 rounded text-center text-md text-white font-roboto font-medium bg-[#1088FF] transition-all ease-in-out hover:text-[#1088FF] hover:border-2 hover:border-[#1088FF] hover:bg-transparent" type="submit" value="Submit" />
+                        <input className="w-full h-14  lg:h-14 m-2 p-2 lg:my-0 rounded text-center text-3xl font-inter font-bold" type="text" value={answer} onChange={handleAnswerChange} />
+                        <input className="w-full h-14          m-2 p-2 lg:my-0 rounded text-center text-xl text-white font-roboto font-light bg-[#1088FF] transition-all ease-in-out hover:text-[#1088FF] hover:border-2 hover:border-[#1088FF] hover:bg-transparent" type="submit" value="Submit" />
                     </form>
                     
                 </div>

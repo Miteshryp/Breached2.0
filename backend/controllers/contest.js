@@ -96,13 +96,15 @@ async function generateOverallLeaderboard() {
          if(index >= 0) {
             logger.warn("Entering for: " + rankList[index].regNo);
             // updating score
+            console.log("Before: " + rankList[index].score);
             rankList[index].score += contestant.score;
+            console.log("After: " + rankList[index].score);
             
             // updating latest submission
             if(!rankList[index].lastSubmissionTime) {
                rankList[index].lastSubmissionTime = new Date(contestant.lastSubmissionTime);
             } else {
-               rankList[index].lastSumissionTime = (rankList[index].lastSubmissionTime.getTime() < contestant.lastSubmissionTime.getTime() ?  contestant.lastSubmissionTime : rankList[index].lastSubmissionTime);
+               rankList[index].lastSumissionTime = (contestant.lastSubmissionTime && rankList[index].lastSubmissionTime.getTime() < contestant.lastSubmissionTime.getTime() ?  contestant.lastSubmissionTime : rankList[index].lastSubmissionTime);
             }
             // console.log(currLas)
          } else {
@@ -576,7 +578,7 @@ exports.getCurrentQuestion =  async (req, res) => {
    }
 
    if(!currentQues)
-      return successResponse(res, "All questions are answered", {complete: false}, 200);
+      return successResponse(res, "All questions are answered", {end:true, complete: false, data: {endCredit: contest.endCredit}}, 200);
 
    // Fetching the current question details.
    logger.debug("Fetching question")
@@ -623,11 +625,5 @@ exports.createContest = async(req, res) => {
 
    return successResponse(res, "Contest created successfully");
 }
-
-
-exports.getDescription = async () => {
-
-}
-
 
 // ------------------- Testing -------------------------

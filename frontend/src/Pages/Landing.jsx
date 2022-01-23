@@ -72,7 +72,7 @@ export default function LandingPage(props) {
         navigate('/signup')
     }
     const discordRedirect = () => {
-        window.location.href = "https://discord.gg/Fv3PTJy9";
+        window.open("https://discord.gg/Fv3PTJy9");
         return null;
     }
     return (
@@ -100,7 +100,7 @@ export default function LandingPage(props) {
 
                 {/* Buttons */}
                 <div className="w-full py-12 flex flex-col md:flex-row gap-6 justify-center items-center">
-                    <button onClick={signupRedirect} className="w-9/12 md:w-3/12 h-12 rounded-sm text-white text-xl font-bold font-inter bg-[#fd7e17] hover:scale-110 transition-all duration-300"> Register </button>
+                    <button onClick={signupRedirect} className="w-9/12 md:w-3/12 h-12 rounded-sm text-white hover:text-[#fd7e17] text-xl font-bold font-inter bg-[#fd7e17] hover:bg-transparent hover:border-2 hover:border-[#fd7e17] transition-all duration-300"> Register </button>
                     <button onClick={discordRedirect}    className="w-9/12 md:w-3/12 h-12 rounded-sm flex flex-row justify-center items-center text-[#5460E6] hover:text-white text-xl font-bold font-inter bg-transparent outline-1 outline-[#5460E6] outline-double transition-all duration-300 hover:bg-[#5460E6]">
                         <FaDiscord className="w-fit h-full m-3" /> Join Discord
                     </button> 
@@ -144,7 +144,7 @@ export default function LandingPage(props) {
                     <div className="flex flex-col justify-start items-start">
                         {/* <IeeeLogo className=""/> */}
                         <IeeeDomeLogo onClick={() => {
-                            window.location.href = "https://ieeemuj.com/";
+                            window.open("https://ieeemuj.com/");
                             return null;
                         }} className="w-full lg:w-[80%] h-full" />
                     </div>

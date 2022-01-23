@@ -11,16 +11,11 @@ export default function PdfDocument(props) {
 
     useEffect(() => {
         if(parentRef.current) {
-            console.log("Available");
             setPdfWidth(parentRef.current.offsetWidth);
             setPdfHeight(parentRef.current.offsetHeight);
-
-            console.log("Width: " + parentRef.current.offsetWidth);
-            console.log("Height: " + parentRef.current.offsetHeight);
         }
     }, [parentRef]);
 
-    console.log(parentRef);
     window.onresize = () => {
         if(parentRef.current) {
             // setPdfWidth(parentRef.current.getBoundingClientRect().width);
@@ -35,7 +30,19 @@ export default function PdfDocument(props) {
     return (
         <div ref={parentRef} className="w-full h-full">
         <Document 
-            file={{url}}
+            
+            file={
+                {
+                    url: url,
+                    httpHeaders: {
+                        'Access-Control-Allow-Origin': "*"
+                        // 'X-Amz-Signature': '9b85617fc3918f3103bf17e0abb61650b6c414e32da8caaf9662c018cf220f00',
+                        // 'X-Amz-Credential':'AKIAZ5A3K6VY7LDWGOX4%2F20220122%2Fus-east-1%2Fs3%2Faws4_request',
+                        // 'X-Amz-SignedHeaders':'host',
+                        // 'X-Amz-Algorithm':'AWS4-HMAC-SHA256'
+                    }
+                }
+            }
             onLoadSuccess={({numPages}) => {
             }}
             onLoadProgress={() => {
@@ -44,7 +51,7 @@ export default function PdfDocument(props) {
             onLoadError={() => {
                 // console.log("ERROR loading pdf");
             }}>
-            <Page pageNumber={1} width={pdfWidth + 100} height={pdfHeight + 100} />
+            <Page pageNumber={1} width={pdfWidth - 50} />
         </Document>
         </div>
     )

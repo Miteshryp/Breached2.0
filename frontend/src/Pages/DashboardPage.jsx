@@ -23,9 +23,7 @@ export default function DashboardPage() {
 
     useEffect(() => {
         let tokenName = process.env.REACT_APP_USER_TOKEN
-        console.log(tokenName)
         let token = localStorage.getItem(tokenName);
-        console.log("Token: " + token)
         if(token) {
             setAuthenticated(true);
         }

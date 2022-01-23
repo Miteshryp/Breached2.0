@@ -70,7 +70,6 @@ export default function Login(props) {
                 // navigate("/dashboard", {replace: true});
             } else {
                 console.log("Auth Failed");
-                console.log(response.data.message);
                 setFailShow({status: true, message: response.data.message});
                 setFetching(false);
             }

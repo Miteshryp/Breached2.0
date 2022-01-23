@@ -1,5 +1,5 @@
 let cors_settings = {
-   // origin: "www.breached.ieee.org",
+   origin: process.env.FRONTEND_ORIGIN,
 }
 
 module.exports = cors_settings;

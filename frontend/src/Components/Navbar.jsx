@@ -64,7 +64,6 @@ export default function Navbar(props) {
     const buttonClick = () => {
         navigate("/login");
     }
-    console.log(userData)
 
     return (
         <div className=" sticky top-0 flex h-20 mx-0 py-4 w-auto border-white/10 border-b-4 border-solid z-50 bg-transparent backdrop-blur-lg drop-shadow-2xl">

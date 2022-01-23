@@ -55,7 +55,6 @@ export default function Signup(props) {
         setFetching(true);
         try {
             let response = await axios.post(backend_settings.signup, values);
-            console.log(response);
             if(response.data.auth) {
                 setFetching(false);
                 localStorage.setItem(process.env.REACT_APP_USER_TOKEN, response.data.token);
@@ -71,7 +70,7 @@ export default function Signup(props) {
                 });
             }
         } catch(err) {
-            console.log(err.response);
+            console.log(err);
             setFetching(false);
             setFailShow({
                 status: true,
@@ -136,7 +135,6 @@ export default function Signup(props) {
         </button>
     );
 
-    console.log(failShow.status);
     return (
         <div>
         <div className="grid grid-cols-1 md:grid-cols-2 h-screen justify-end">

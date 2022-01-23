@@ -27,6 +27,7 @@ export default function QuestionScreen() {
     let [question, setQuestion] = useState(null);
     let [submitSuccess, setSubmitSuccess] = useState(false);
     let [incorrect, setIncorrect] = useState(false);
+    let [contestEnd, setContestEnd] = useState({endCredit: null, status: false});
 
     let [refresh, setRefresh] = useState(1);
 
@@ -44,12 +45,16 @@ export default function QuestionScreen() {
                 setQuestion(fetch.data.data.question);
                 setFetching(false);
                 // setFetching(false);
-            } else {
+            } else if(fetch.data.end) {
+                setContestEnd({status: true, endCredit: fetch.data.data.endCredit});
+                setQuestion(null);
+                setFetching(false);
+            }   else {
                 console.log(fetch.data.message);
                 setFailShow({title: "Questions not available", message: fetch.data.message, status: true})
             }
         } catch(err) {
-            console.log(err.response.status)
+            // console.log(err.response.status)
             if(err.response.status === 500 || err.response.status === 300) {
                 console.log(err.response.data.message);
                 setFailShow({title: "Questions not available", message: err.response.data.message, status: true});
@@ -75,6 +80,23 @@ export default function QuestionScreen() {
         <div className={`px-14 py-10 w-full h-screen ${failShow.title === "Questions not available" && !fetching ? 'hidden' : ''} `}>
             <QuestionCard question={question} signalSubmit={setFetching} signalSuccess={setSubmitSuccess} signalFail={setFailShow} signalWrongAnswer={setIncorrect}/>
         </div>
+        }
+
+        {
+            contestEnd && contestEnd.status && (
+                <div className="p-20 w-full h-full rounded-2xl bg-card">
+                    <h1 className="mb-10 mx-auto text-white text-6xl font-inter font-bold"> Day Ended. </h1>
+                    {
+                        contestEnd.endCredit.map((element) => {
+                            return (
+                                <p className="mb-7 text-white text-xl font-inter font-light">
+                                    {element}
+                                </p>
+                            )
+                        })
+                    }
+                </div>
+            )
         }
 
         {/* Modal background */}

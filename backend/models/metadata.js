@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 
 
 const schemaData = {
-    dashboardDescription: String,
+    name: String,
+    dashboardDescription: [{type: String}],
+    active: Boolean
 }
 
 const metadataSchema = new mongoose.Schema(schemaData);

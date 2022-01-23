@@ -17,7 +17,7 @@ export default function LeaderboardScreen(props) {
     let [failShow, setFailShow] = useState(false);
     let [responseData, setResponseData] = useState(null);
 
-    console.log(responseData);
+    // console.log(responseData);
 
     useEffect(async () => {
         setFetching(true)

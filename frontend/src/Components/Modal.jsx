@@ -39,7 +39,6 @@ export default function Modal(props) {
    return (
       <div onClick={(e) => {
          if(removable && e.target.getAttribute('name') === modalBackgroundName) {
-            console.log("works")
             animationControl.start("hidden").then(() => {
                setSight(false);
             });

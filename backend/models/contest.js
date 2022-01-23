@@ -40,16 +40,17 @@ const schema = {
       type: [{
          qid: String,
          title: String,
-         statement: String,
+         statement: [{type: String}],
          answer: String,
          awardPoints: Number,
          clueMedia: [{
             url: String,
             contentType: String
          }],
-         hints: [{type: String}]
       }]
    },
+
+   endCredit: [{type:String}]
 
 };
 
