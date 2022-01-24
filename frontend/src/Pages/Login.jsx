@@ -173,14 +173,14 @@ export default function Login(props) {
             </div> 
         </div> */}
 
-        <Modal sm visible={fetching}>
+        <Modal md visible={fetching}>
                 <div className="w-full h-full flex flex-col justify-center items-center" >
                     <LoginLoader className="w-[80%] h-full fill-blue-500" />
                     <h1 className="text-white font-light text-4xl"> Logging in... </h1>
                 </div>
         </Modal>
 
-        <Modal sm visible={failShow.status && !fetching} removable>
+        <Modal md visible={failShow.status && !fetching} removable>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
                 <h1 className="text-white text-4xl font-inter text-center"> Login Failed </h1>
@@ -188,7 +188,7 @@ export default function Login(props) {
             </div>
         </Modal>
 
-        <Modal sm visible={!fetching && loginSuccess}>
+        <Modal md visible={!fetching && loginSuccess}>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <Lottie
                     className={"w-full h-full"}
@@ -208,7 +208,7 @@ export default function Login(props) {
             </div>
         </Modal>
 
-        <Modal sm visible={showRedirect}>
+        <Modal md visible={showRedirect}>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <Lottie
                     className={"w-full h-full"}

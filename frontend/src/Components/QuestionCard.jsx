@@ -90,8 +90,8 @@ export default function QuestionCard(props) {
     
 
     return (
-        <div className="w-full h-fit lg:h-full p-20  rounded-2xl bg-card">
-            <div className="h-[90%] p-4 my-10 lg:my-0 flex flex-col lg:flex-row justify-start lg:justify-center gap-10 lg:gap-5">
+        <div className="w-full h-fit lg:h-full p-10 md:p-20  rounded-2xl bg-card">
+            <div className="h-[90%] p-2 my-10 lg:my-0 flex flex-col lg:flex-row justify-start lg:justify-center gap-10 lg:gap-5">
                 <div className="w-full lg:w-7/12 h-auto flex flex-col gap-4 lg:justify-start" ref={parentRef}>
                     <h1 className="text-white text-4xl font-medium font-roboto">{question.title ? question.title : "No Title"}</h1>
 

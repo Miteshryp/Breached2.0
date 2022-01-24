@@ -70,7 +70,7 @@ export default function FormCard(props) {
                       </div>
                       )}
 
-                      <div className="w-full flex flex-row gap-3 items-center">
+                      <div className="w-full flex flex-col md:flex-row gap-3 items-center">
                           <button 
                            name={submitData.name}
                            type="submit"   

@@ -77,7 +77,7 @@ export default function QuestionScreen() {
 
         {/* Question Card */}
         { question && 
-        <div className={`px-14 py-10 w-full h-screen ${failShow.title === "Questions not available" && !fetching ? 'hidden' : ''} `}>
+        <div className={`md:px-14 md:py-10 w-full h-screen ${failShow.title === "Questions not available" && !fetching ? 'hidden' : ''} `}>
             <QuestionCard question={question} signalSubmit={setFetching} signalSuccess={setSubmitSuccess} signalFail={setFailShow} signalWrongAnswer={setIncorrect}/>
         </div>
         }
@@ -108,7 +108,7 @@ export default function QuestionScreen() {
         </div>
 
         {/* Loading Modal */}
-        <Modal sm visible={fetching} fullScreen>
+        <Modal md visible={fetching} fullScreen>
                 <div className="w-full h-full flex flex-col justify-center items-center" >
                     <Loader className="w-[80%] h-full fill-blue-500" />
                     <h1 className="text-white font-light text-4xl"> Please wait </h1>
@@ -138,7 +138,7 @@ export default function QuestionScreen() {
         </Modal>
 
         {/* Incorrect Answer  */}
-        <Modal sm visible={incorrect && !fetching} removable fullScreen>
+        <Modal md visible={incorrect && !fetching} removable fullScreen>
             <div className="w-full h-full flex flex-col justify-center items-center gap-5" >
                 <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
                 <h1 className="text-white text-4xl font-inter text-center"> Incorrect Answer </h1>
@@ -148,7 +148,7 @@ export default function QuestionScreen() {
 
 
         {/* Success Modal  */}
-        <Modal sm visible={!fetching && submitSuccess}>
+        <Modal md visible={!fetching && submitSuccess}>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <Lottie
                     className={"w-full h-full"}

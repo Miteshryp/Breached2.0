@@ -7,63 +7,22 @@ import Navbar from "../Components/Navbar";
 
 // services/metadata
 import faqData from "./../Assets/data/faqData"
-import contactData from "./../Assets/data/contactData"
-import {ReactComponent as IeeeLogo} from "./../Assets/svg/ieee_logo.svg"
+import rulesInfo from "./../Assets/data/rulesData"
+import socialsInfo from "./../Assets/data/socialsData"
+import contactInfo from "./../Assets/data/contactData"
 import {ReactComponent as IeeeDomeLogo} from "./../Assets/svg/IeeeDomeLogo.svg"
-// import {FaInstagramSquare} from "react-icons/fa"
-import {AiFillLinkedin, AiOutlineInstagram, AiOutlineLinkedin, AiOutlineMedium, AiFillMediumCircle} from "react-icons/ai"
-import {BsFacebook} from "react-icons/bs"
+
+
+// Icons
 import {IoIosCall} from "react-icons/io"
 import {FaDiscord} from "react-icons/fa" 
 
 export default function LandingPage(props) {
     let navigate = useNavigate();
 
-    let linkArr = [
-
-    ];
-    
-    
-    
-    
-    const rules = [
-    "The time limit for Round 1 is 24 hours. The objective of the hunt is to finish the hunt as soon as possible.", 
-    "Only the team leader is supposed to register for the team. Only one account per team is allowed. Other members of the team are to use the same account for login.",
-    "All official hints will be released on the Breached 2.0 discord server. Collusion with other team players is not allowed and will lead to disqualification if caught.",
-    "The leaderboard is time based. Meaning teams solving the problems in the least amount of time will be at the top"
-    ];
+    let linkArr = [];
 
 
-    const contactInfo = [
-        {
-            name: "Shaleen Poddar",
-            contact: "+91 98254 40501"
-        },
-        {
-            name: "Ronak Modi",
-            contact: "+91 81068 53161"
-        }
-    ];
-
-
-    const socials = [
-        {
-            url: "https://www.instagram.com/ieeemuj/",
-            Icon: <AiOutlineInstagram className="w-[45px] h-full" fill="#ffffff"/>
-        },
-        {
-            url:"https://medium.com/@ieeemuj",
-            Icon: <AiFillMediumCircle className="w-[45px] h-full" fill="#ffffff" />
-        },
-        {
-            url:"https://www.linkedin.com/company/ieeesbmuj/",
-            Icon: <AiFillLinkedin className="w-[45px] h-full fill-white" />
-        },
-        {
-            url: "https://www.facebook.com/ieeemuj/",
-            Icon: <BsFacebook className="w-[45px] h-full fill-white"/>
-        }
-    ]
 
 
 
@@ -77,10 +36,10 @@ export default function LandingPage(props) {
     }
     return (
         <div>
-            <div id="intro" className="fixed top-0 left-0 w-screen h-[350vh] -z-50 bg-landing blur-lg opacity-100">
+            <div id="intro" className="fixed top-0 left-0 w-screen h-[350vh] -z-50 bg-landing">
             </div>
-            <div className='px-10 md:px-20 w-full h-fit bg-[#000000] mix-blend-screen'>
-                <Navbar links={linkArr} />
+            <Navbar links={linkArr} />
+            <div className='px-10 md:px-20 w-full h-fit'>
 
                 {/* Intro Section */}
                 <div className="my-18 flex flex-col gap-10 h-fit px-0 lg:px-[13.5rem] py-16 justify-center items-center" >
@@ -99,10 +58,13 @@ export default function LandingPage(props) {
                 </div>
 
                 {/* Buttons */}
-                <div className="w-full py-12 flex flex-col md:flex-row gap-6 justify-center items-center">
-                    <button onClick={signupRedirect} className="w-9/12 md:w-3/12 h-12 rounded-sm text-white hover:text-[#fd7e17] text-xl font-bold font-inter bg-[#fd7e17] hover:bg-transparent hover:border-2 hover:border-[#fd7e17] transition-all duration-300"> Register </button>
-                    <button onClick={discordRedirect}    className="w-9/12 md:w-3/12 h-12 rounded-sm flex flex-row justify-center items-center text-[#5460E6] hover:text-white text-xl font-bold font-inter bg-transparent outline-1 outline-[#5460E6] outline-double transition-all duration-300 hover:bg-[#5460E6]">
-                        <FaDiscord className="w-fit h-full m-3" /> Join Discord
+                <div className="w-full py-12 flex flex-col lg:flex-row gap-6 justify-center items-center">
+                    <button onClick={signupRedirect} className="w-full lg:w-4/12 h-12 rounded-sm text-white hover:text-[#fd7e17] text-xl font-bold font-inter bg-[#fd7e17] hover:bg-transparent hover:border-2 hover:border-[#fd7e17] transition-all duration-300"> Register </button>
+                    <button onClick={discordRedirect}    className=" group w-full lg:w-4/12 h-12 rounded-sm flex flex-row justify-center items-center bg-transparent outline-1 outline-[#5460E6] outline-double transition-all duration-300 hover:bg-[#5460E6]">
+                        <div className="mx-auto w-full h-full flex flex-row justify-center items-center gap-3">
+                            <FaDiscord className="basis-10 h-4/6 fill-[#5460E6] group-hover:fill-white" /> 
+                            <h1 className="basis-30 text-[#5460E6] group-hover:text-white font-bold font-inter text-xl ">Join Discord </h1>
+                        </div>
                     </button> 
                 </div>
                 
@@ -113,7 +75,7 @@ export default function LandingPage(props) {
                         <h1 className="text-white text-5xl lg:text-7xl font-inter font-bold"> Rules </h1>
                     </div>
                     { 
-                        rules.map((element, index) => {
+                        rulesInfo.map((element, index) => {
                             return (
                             <div className="p-4 flex flex-col justify-center items-center lg:justify-start lg:items-start">
                                 <h1 className="hidden lg:flex text-white text-4xl font-inter font-bold">
@@ -132,7 +94,7 @@ export default function LandingPage(props) {
                     <h1 className="hidden sm:block text-white text-5xl md:text-5xl font-bold font-inter ">Frequently Asked Questions</h1>
                     <h1 className="block sm:hidden text-white text-5xl md:text-7xl font-bold font-inter ">FAQ's</h1>
 
-                    <div className="w-screen px-10 my-10 md:w-[60vw] flex flex-col justify-center items-center gap-3">
+                    <div className="w-screen px-10 my-10 lg:w-[60vw] flex flex-col justify-center items-center gap-3">
                         {faqData.map((data) => <FaqCard data={data} />)}
                     </div>
                 </div>
@@ -141,16 +103,15 @@ export default function LandingPage(props) {
             {/* Footer */}
             <div className="w-full h-fit py-20 pl-4 px-[10%] bg-[#181823]">
                 <div className="p-2 flex flex-col justify-center items-center lg:grid lg:grid-cols-2 gap-20">
-                    <div className="flex flex-col justify-start items-start">
+                    <div className="w-full h-full flex flex-col justify-start items-start">
                         {/* <IeeeLogo className=""/> */}
-                        <IeeeDomeLogo onClick={() => {
-                            window.open("https://ieeemuj.com/");
-                            return null;
-                        }} className="w-full lg:w-[80%] h-full" />
+                        <a className="w-full h-fit justify-start items-start" href="https://ieeemuj.com/" >
+                            <IeeeDomeLogo className="w-full lg:w-[80%] h-full" />
+                        </a>
                     </div>
 
                     {/* Contact Us */}
-                    <div className="my-12 lg:my-0 grid grid-cols-2 gap-24 lg:gap-10" >
+                    <div className="my-12 lg:my-0 grid md:grid-cols-2 gap-24 lg:gap-10" >
                         <div className="flex flex-col gap-1">
                             <h1 className="text-white text-xl font-inter font-bold"> 
                                 Contact Us 
@@ -180,9 +141,9 @@ export default function LandingPage(props) {
                                 Socials
                             </h1>
 
-                            <div className="w-full h-fit px-2 grid grid-cols-1 grid-rows-4 sm:grid-cols-4 sm:grid-rows-1 lg:gap-20 gap-4">
+                            <div className="w-full h-fit px-2 grid grid-cols-4 grid-rows-1 lg:gap-20 gap-4">
                             {
-                                socials.map((element) => {
+                                socialsInfo.map((element) => {
                                     return (
                                         <div className="flex flex-row justify-center items-center">
                                             <a href={element.url} >{element.Icon}</a>

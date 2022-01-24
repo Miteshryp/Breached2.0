@@ -1,10 +1,10 @@
 export default [
     {
         name: "Mitesh Sharma",
-        phone: "+91 9165257248"
+        contact: "+91 91652 57248"
     },
     {
-        name: "Utkarsh Rana",
-        phone: "AP Dhillon se poocho"
+        name: "Aarohi Manchanda",
+        contact: "+91 99992 14243"
     }
 ]

@@ -198,7 +198,7 @@ export default function ContestScreen(props) {
         }
         
 
-        <Modal sm fullScreen visible={fetching || registering}>
+        <Modal md fullScreen visible={fetching || registering}>
                 <div className="w-full h-full flex flex-col justify-center items-center" >
                     <LoginLoader className="w-[80%] h-full fill-blue-500" />
                     <h1 className="text-white font-light text-4xl"> Please wait... </h1>
@@ -213,7 +213,7 @@ export default function ContestScreen(props) {
             </div>
         </Modal>
 
-        <Modal sm visible={!fetching && success} fullScreen>
+        <Modal md visible={!fetching && success} fullScreen>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <Lottie
                     className={"w-full h-full"}
