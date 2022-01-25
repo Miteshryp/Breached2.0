@@ -1,4 +1,7 @@
+// Library
 import { useState } from "react"
+
+// Assets
 import {ReactComponent as Dropdown} from "./../Assets/svg/dropdown.svg"
 
 export default function FaqCard(props) {

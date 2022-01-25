@@ -1,19 +1,7 @@
-// Library imports
-import Lottie from "react-lottie";
-import { useEffect, useState } from "react";
-
-// Components
-import Modal from "./Modal"
 
 // services and meta
 import axios from "./../Utils/axios_setup"
 import backend from "./../backend_settings";
-
-// Assets
-import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
-import {ReactComponent as LoginLoader} from "./../Assets/svg/loginLoad.svg"
-import * as successAnimationData from "./../Assets/animations/successAnimation.json"
-import services from "./../Utils/services";
 
 
 

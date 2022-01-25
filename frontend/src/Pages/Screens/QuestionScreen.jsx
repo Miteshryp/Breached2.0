@@ -84,7 +84,7 @@ export default function QuestionScreen() {
 
         {
             contestEnd && contestEnd.status && (
-                <div className="p-20 w-full h-full rounded-2xl bg-card">
+                <div className="p-10 lg:p-20 w-full h-full rounded-2xl bg-card">
                     
                     {
                         contestEnd.endCredit.map((element, index) => {
@@ -143,6 +143,14 @@ export default function QuestionScreen() {
                 <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
                 <h1 className="text-white text-4xl font-inter text-center"> Incorrect Answer </h1>
                 {/* <h1 className="text-white text-4xl font-roboto text-center">  </h1> */}
+                <button
+                    onClick={() => {
+                        setIncorrect(false)
+                        setRefresh(prev => prev++);
+                    }}
+                    className="mt-20 w-[80%] h-fit p-3 group flex flex-row justify-center items-center gap-3 hover:bg-emerald-500 bg-transparent outline-1 outline-double outline-emerald-500 backdrop-blur-3xl rounded transition-all ease-in-out duration-300">
+                        <p className="group-hover:text-white text-2xl font-light font-roboto text-emerald-500"> Retry </p>
+                </button>
             </div>
         </Modal>
 

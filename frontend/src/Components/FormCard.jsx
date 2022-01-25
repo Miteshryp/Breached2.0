@@ -22,8 +22,8 @@ export default function FormCard(props) {
 
    return (
    <div className={`p-10 flex justify-center items-center ${background ? background : formDefaultBackgroundColor}`}>
-      <div className="flex flex-col gap-10 mx-auto my-auto w-auto px-20">
-          <div className="w-full justify-items-start" >
+      <div className="w-full mx-5 md:w-auto flex flex-col gap-10 md:mx-10 my-auto">
+          <div className="w-full flex flex-col justify-center items-start md:justify-items-start" >
               <p className="flex-1 text-white text-sm font-roboto font-medium"> {header.salutation} </p>
               <p className="flex-1 text-white text-5xl font-roboto font-bold "> {header.title} </p>
           </div>

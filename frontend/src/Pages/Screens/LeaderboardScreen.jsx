@@ -93,6 +93,8 @@ export default function LeaderboardScreen(props) {
                                 preserveAspectRatio: 'xMidYMid slice'
                               }
                         }}
+                        width={350}
+                        height={350}
                         isStopped={!failShow.status}
                     />
                     <h1 className="text-white text-4xl font-inter text-center"> Leaderboard Unavailable </h1>

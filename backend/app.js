@@ -13,6 +13,7 @@ const express = require("express");
 const cors = require("cors");
 const logger = require("node-color-log");
 const mongoose = require("mongoose");
+const redis = require("./utils/redis-client");
 
 
 if(dotenv.error) {
@@ -40,6 +41,13 @@ let initDatabase = async () => {
    logger.info("Connected to database successfully.");
 };
 initDatabase();
+
+
+(async () => {
+   await redis.connect();
+   logger.info("Successfully connected to redis server.");
+})();
+
 
 // routers
 app.use("/contest", require("./routes/contest"));

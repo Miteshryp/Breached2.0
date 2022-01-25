@@ -1,8 +1,6 @@
-let auth = require("./auth");
+const auth = require("./auth");
+const redis = require("./redis");
 
-let middlewares = {
-   verifyAuth: auth.verifyAuth,
-   verifyAdminAuth: auth.verifyAdminAuth
-}
+let middlewares = {auth, redis}
 
 module.exports = middlewares;

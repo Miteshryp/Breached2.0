@@ -17,10 +17,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.4",
     "node-color-log": "^7.0.0",
+    "redis": "^4.0.2",
     "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Miteshryp/breached-backend.git"

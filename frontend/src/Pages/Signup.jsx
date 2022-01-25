@@ -19,22 +19,6 @@ import {ReactComponent as FailLogo} from "./../Assets/svg/failFaceLogo.svg"
 // metadata
 import backend_settings from "../backend_settings";
 
-function InputField(props) {
-    let {name, label, value, placeholder, onChange, type} = props
-    return (
-        <div className="w-full flex flex-col gap-0">
-            <label className="text-lg text-gray-700"> {label} </label>
-            <input 
-                name={name} 
-                type={type} 
-                value={value}
-                onChange={onChange} 
-                placeholder={placeholder}  
-                className="block w-full text-white px-4 my-1 h-14 bg-transparent rounded-md border-2 border-white/70 focus:outline-none focus:border-[#5264B5] transition-all ease-in-out duration-300" />
-        </div>
-    )
-}
-
 
 export default function Signup(props) {
     
@@ -149,7 +133,7 @@ export default function Signup(props) {
                             preserveAspectRatio: "xMidyMid slice"
                         }
                     }} 
-                    width={500}
+                    width={450}
                     height={500}
                     isStopped={false}
                     isClickToPauseDisabled={true}
@@ -172,7 +156,7 @@ export default function Signup(props) {
 
 
 
-        <Modal sm visible={!fetching && complete}>
+        <Modal md visible={!fetching && complete}>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <Lottie
                     className={"w-full h-full"}
@@ -192,7 +176,7 @@ export default function Signup(props) {
             </div>
         </Modal>
 
-        <Modal sm visible={askProceed}>
+        <Modal md visible={askProceed}>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <Lottie
                     className={"w-full h-full"}
@@ -217,27 +201,20 @@ export default function Signup(props) {
         </Modal>
 
 
-        <Modal sm visible={fetching}>
+        <Modal md visible={fetching}>
             <div className="w-full h-full flex flex-col justify-center items-center" >
                 <Loader className="w-[80%] h-full fill-blue-500" />
                 <h1 className="text-white font-light text-4xl"> Signing up... </h1>
             </div>
         </Modal>
 
-        <Modal sm visible={failShow.status && !fetching} removable>
+        <Modal md visible={failShow.status && !fetching} removable>
             <div className="w-full h-full flex flex-col justify-center items-center gap-4" >
                 <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo>
                 <h1 className="text-white text-4xl font-inter text-center"> Signup Failed </h1>
                 <h1 className="text-white text-4xl font-roboto text-center"> {failShow.message} </h1>
             </div>
         </Modal>
-        
-
-        {/* <div className={"absolute top-0 left-0 justify-center items-center fixed w-screen h-screen p-20 bg-black/60 " + (fetching ? "flex" : "hidden")}>
-            <div className="w-full md:w-1/3 lg:w-1/2 flex justify-center items-center h-5/6 bg-white">
-                <img src="loading.gif" /> 
-            </div> 
-        </div> */}
                 
         </div>
     )

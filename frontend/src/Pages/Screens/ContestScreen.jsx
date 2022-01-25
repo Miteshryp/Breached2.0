@@ -27,20 +27,14 @@ export default function ContestScreen(props) {
     let [description, setDescription] = useState();
     let [fetching, setFetching] = useState(false);
     let [success, setSuccess] = useState(false);
+    let [registered, setAlert] = useState(false);
     let [refresh, setRefresh] = useState(0);
     // map an array to the contestID
 
     useEffect(async () => {
         setFetching(true);
         try {
-            let response = await axios.get(backend.activeContestList, {
-                headers: {
-                    'Cache-Control': 'no-cache',
-                    'Pragma': 'no-cache',
-                    'Expires': '0',
-                    'x-access-token': localStorage.getItem(process.env.REACT_APP_USER_TOKEN)
-                }
-            });
+            let response = await axios.get(backend.activeContestList, services.auth.getNoCacheCredentialHeaders());
 
             if(response.data.complete) {
                 // console.log(response.data.data.contestList);
@@ -66,10 +60,14 @@ export default function ContestScreen(props) {
             setFetching(false);
         } catch(err) {
             console.log(err);
+            if(err.response.status === 300) {
+                setAlert(true);
+            } else {
+                setFailShow({status: true, message:  (err.response && err.response.data ? err.response.data.message : err.message)});
+            }
             // console.log(err.response);
             // console.log(err.data.message)
             setContestList(null)
-            setFailShow({status: true, message:  (err.response && err.response.data ? err.response.data.message : err.message)})
             setFetching(false);
         }
     }, [refresh]);
@@ -121,14 +119,14 @@ export default function ContestScreen(props) {
     return (
         <div>
 
-        <div className={`w-screen h-screen fixed left-0 top-0 bg-dashboard -z-20`}>
+        <div className={`w-screen h-full fixed left-0 top-0 bg-dashboard -z-20`}>
         </div>
 
         {/* Main Display Contest page */}
         { showContest ? (
-        <div className="w-full h-full p-10">
+        <div className="w-full h-full p-1 md:p-10">
             
-            <div className="mb-40 w-full h-fit m-10 px-10 flex flex-col justify-start items-start">
+            <div className="mb-40 w-full h-fit m-5 md:m-10 px-0 md:px-10 flex flex-col justify-start items-start">
                 <h1 className="text-white text-6xl font-roboto font-bold">
                     Prologue
                 </h1>
@@ -146,11 +144,11 @@ export default function ContestScreen(props) {
                 </div>
             </div>   
 
-            <div className="w-full h-fit m-10 px-10 flex justify-start items-center">
+            <div className="w-full h-fit m-5 md:m-10 md:px-10 flex justify-start items-center">
                 <h1 className="text-white text-6xl font-roboto font-bold"> Contests </h1>
             </div>
 
-            <div className="w-full h-full px-20 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="w-full h-full px-5 md:px-20 py-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
 
             {
                 contestList && contestList.map((contest) => {
@@ -160,30 +158,6 @@ export default function ContestScreen(props) {
                 })
                 
             }
-
-            {/* Sample Card - to-[#2a2a72] */}
-                {/* <div className="group w-full h-full px-10 p-5 bg-size-200 bg-pos-0 hover:bg-pos-100 bg-gradient-to-b from-[#009ffd] via-[#1b64b7] to-[#2288fd] transition-all rounded-xl shadow-2xl shadow-[#009ffd]/25 hover:scale-110">
-                    <h1 className="text-white text-xl font-roboto font-bold transition-all"> Contest Name </h1>
-                    <div className="my-4">
-                    <p className="text-white"> No of Questions: n</p>
-                        <p className="text-white"> Starts at: sometime</p>
-                        <p className="text-white"> Ends at: sometime </p>
-                    </div>
-
-                    <div className="flex justify-center items-center">
-                        <button className="mx-auto px-4 py-2 hover:bg-white rounded hover:text-black border-2 border-white text-white transition-all bg-transparent" >
-                            Register
-                        </button>
-                    </div>
-                </div>
-
-                <div className="w-full h-full rounded-xl shadow-2xl shadow-black/20">
-                    <p> Something </p>
-                </div>
-
-                <div className="w-full h-full rounded-xl shadow-2xl shadow-black/20">
-                    <p> Something </p>
-                </div>               */}
             </div>
         </div>
         ): ("")}
@@ -227,9 +201,31 @@ export default function ContestScreen(props) {
                     }}
                     isStopped={!success}
                     isClickToPauseDisabled={true}
-                    eventListeners={[{eventName: "complete", callback: () => { setRefresh(prev => ++prev); setSuccess(false); setRegistering(false); }}]}
+                    // eventListeners={[{eventName: "complete", callback: () => { setRefresh(prev => ++prev); setSuccess(false); setRegistering(false); }}]}
                 ></Lottie>
                 <h1 className="text-white text-4xl font-inter text-center"> Registration Successful </h1>
+            </div>
+        </Modal>
+
+        {/* Alert Modal */}
+        <Modal md visible={registered && !fetching} fullScreen>
+            <div className="w-full h-full flex flex-col justify-center items-center gap-5" >
+                {/* <FailLogo className="w-full h-1/2 md:w-1/2 md:h-1/2 fill-rose-400 animate-pulse"></FailLogo> */}
+                <Lottie
+                    options={{
+                        animationData: successAnimationData,
+                        loop: false,
+                        autoplay: false,
+                        rendererSettings: {
+                            preserveAspectRatio: 'xMidYMid slice'
+                          }
+                    }}
+                    width={300} height={300}
+                    isStopped={!registered}
+                    isClickToPauseDisabled={true}
+                />
+                <h1 className="text-white text-4xl font-inter text-center"> Already Registered </h1>
+                {/* <h1 className="text-white text-4xl font-roboto text-center"> {failShow.message} </h1> */}
             </div>
         </Modal>
 

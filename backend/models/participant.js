@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 let schema = {
    name: String,
-   regNo: {
+   regNo: String, 
+   email: {
       required: true, 
       type: String
    },
-   email: String,
    password: String,
    currentContest: String
 };

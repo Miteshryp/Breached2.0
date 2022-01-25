@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
-const secret = process.env.SECRET;
 const logger = require("node-color-log")
+
+const secret = process.env.SECRET;
 
 const User = require("./../models/participant")
 
-function verifyAuth(req, res, next) {
+async function verifyAuth(req, res, next) {
    let token = req.headers["x-access-token"];
 
    jwt.verify(token, secret, async function(err, data) {
@@ -41,5 +42,7 @@ function verifyAdminAuth(req, res, next) {
          next();
    });
 } 
+
+
 
 module.exports = {verifyAuth, verifyAdminAuth};

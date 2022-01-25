@@ -108,8 +108,8 @@ async function generateOverallLeaderboard() {
             }
             // console.log(currLas)
          } else {
-            logger.error("Pushing: ");
-            logger.error(contestant);
+            // logger.warn("Pushing: ");
+            // logger.warn(contestant);
             // logger.error("Current rankList");
             // logger.debug(rankList);
             rankList.push(contestant);
@@ -460,8 +460,6 @@ exports.submission = async(req, res) => {
    let userData = req.userData;
    let {currentContest: contestID} = userData;
 
-   logger.debug(answer, contestID);
-
    let contest = await Contest.findOne({_id: contestID});
    participants = contest.participant;
    
@@ -473,8 +471,6 @@ exports.submission = async(req, res) => {
 
    let user = null;
    for(let i = 0; i < participants.length; i++) {
-      logger.debug(participants[i].participantID);
-      logger.debug(userData._id);
       if(String(participants[i].participantID) === String(userData._id)) {
          user = participants[i];
          break;

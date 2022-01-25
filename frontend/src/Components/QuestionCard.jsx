@@ -68,8 +68,10 @@ export default function QuestionCard(props) {
             console.log("Request Failed");
             console.log(err);
             if(err.response.status === 500 || err.response.status === 300) {
+                console.log(err.response.data.message)
                 signalSuccess(false);
-                signalFail({title: "Submission Failed",message: err.response.message, status:true});
+                signalWrongAnswer(false);
+                signalFail({title: "Submission Failed",message: err.response.data.message, status:true});
             } else {
                 signalSuccess(false);
                 signalFail({title: "Submission Failed",message: err.message, status: true});

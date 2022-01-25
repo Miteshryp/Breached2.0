@@ -89,12 +89,14 @@ export default function Login(props) {
 
     // preset data
     let initialValues = {
-        regNo: "",
+        // regNo: "",
+        email: "",
         password: ""
     }
 
     let validation = yup.object().shape({
-        regNo: yup.string().matches(/^[0-9]+$/, "RegNo: Must be a number").min(9, "9 digits required").max(9, "9 digits only").required("Required"),
+        // regNo: yup.string().matches(/^[0-9]+$/, "RegNo: Must be a number").min(9, "9 digits required").max(9, "9 digits only").required("Required"),
+        email: yup.string().email().required(),
         password: yup.string().required("Required")
     })
 
@@ -114,7 +116,7 @@ export default function Login(props) {
                                 preserveAspectRatio: "xMidyMid slice"
                             }
                         }} 
-                        width={500}
+                        width={450}
                         height={500}
                         isStopped={false}
                         isClickToPauseDisabled={true}
@@ -131,9 +133,9 @@ export default function Login(props) {
                 onSubmit={formikSubmitHandler}
                 inputFields={[
                     {
-                        label: "Registration No",
-                        name: "regNo",
-                        type: "text",
+                        label: "Email",
+                        name: "email",
+                        type: "email",
                         placeholder: ""
                     },
                     {

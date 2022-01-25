@@ -20,8 +20,10 @@ const successResponse = function(res,responseMsg, extraFields = null, statusCode
 
 
 exports.login = async (req,res) => {
-   let {regNo, password} = req.body;
-   let user = await Participant.findOne({regNo: String(regNo)});
+   // let {regNo, password} = req.body;
+   let {email, password} = req.body;
+   // let user = await Participant.findOne({regNo: String(regNo)});
+   let user = await Participant.findOne({email: String(email)});
 
    if(!user)
       return res
@@ -94,11 +96,13 @@ exports.adminLogin = async (req, res) => {
 exports.signup = async (req, res) => {
    let {name, email, regNo, password} = req.body;
    
-   let checkArr = await Participant.findOne({regNo});
+   // let checkArr = await Participant.findOne({regNo});
+   let checkArr = await Participant.findOne({email});
    if(checkArr)
       return res
          .status(500)
-         .send({message: "Registration Number already used", auth: false});
+         .send({message: "Email already used", auth: false});
+         // .send({message: "Registration Number already used", auth: false});
    
    let hashedPass = await bcrypt.hash(password, saltRounds);
 

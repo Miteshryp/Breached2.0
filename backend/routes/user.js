@@ -12,6 +12,6 @@ router.post("/admin/login", controller.adminLogin);
 router.post("/signup", controller.signup);
 router.post("/logout", controller.logout);
 
-router.get("/account", [middleware.verifyAuth], controller.getAccountDetails);
+router.get("/account", [middleware.auth.verifyAuth], controller.getAccountDetails);
 
 module.exports = router;
